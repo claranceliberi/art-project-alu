@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,6 +12,9 @@ import Browse from "./pages/Browse";
 import ArtworkDetail from "./pages/ArtworkDetail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Artists from "./pages/Artists";
+import Categories from "./pages/Categories";
+import CategoryDetail from "./pages/CategoryDetail";
 
 const queryClient = new QueryClient();
 
@@ -26,7 +30,9 @@ const App = () => (
           <Route path="/artwork/:id/*" element={<ArtworkDetail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          {/* Other routes will be added as we develop more pages */}
+          <Route path="/artists" element={<Artists />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/categories/:slug" element={<CategoryDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
