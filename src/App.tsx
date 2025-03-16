@@ -15,6 +15,7 @@ import Register from "./pages/Register";
 import Artists from "./pages/Artists";
 import Categories from "./pages/Categories";
 import CategoryDetail from "./pages/CategoryDetail";
+import About from "./pages/About";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/artists" element={<Artists />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/categories/:slug" element={<CategoryDetail />} />
+          <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
