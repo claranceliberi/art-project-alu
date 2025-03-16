@@ -7,10 +7,14 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatPrice(price: number): string {
-  return new Intl.NumberFormat('en-US', {
+  // Convert price from USD to RWF (approximately 1 USD = 1200 RWF, but this is just an example rate)
+  const rwfPrice = price * 1200;
+  
+  return new Intl.NumberFormat('en-RW', {
     style: 'currency',
-    currency: 'USD',
-  }).format(price)
+    currency: 'RWF',
+    maximumFractionDigits: 0, // RWF doesn't typically use decimal places
+  }).format(rwfPrice)
 }
 
 export function truncateText(text: string, maxLength: number): string {
