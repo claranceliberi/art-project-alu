@@ -1,220 +1,145 @@
-import { db, schema } from '../db';
+import { db } from '../db';
+import { users, categories, artworks } from '../db/schema';
 
 async function seed() {
   try {
-    // Create admin user for artworks
-    const admin = await db.insert(schema.users).values({
+    // Clear existing data
+    await db.delete(artworks);
+    await db.delete(categories);
+    await db.delete(users);
+
+    // Create admin user
+    const [admin] = await db.insert(users).values({
       name: 'Admin User',
       email: 'admin@artmarket.com',
-      password: 'hashed_password_here', // In production, this should be properly hashed
+      password: 'admin123', // In production, this should be hashed
       role: 'admin',
-      bio: 'System administrator',
+      bio: 'Platform administrator',
     }).returning();
 
     // Create categories
-    const categories = await db.insert(schema.categories).values([
-      {
-        name: 'Original Art',
-        description: 'Original paintings, drawings, and illustrations',
-      },
-      {
-        name: 'Photography',
-        description: 'Professional photographs available as prints or digital downloads',
-      },
-      {
-        name: 'Digital Art',
-        description: 'Digital artwork including wallpapers and templates',
-      },
-      {
-        name: 'Prints',
-        description: 'Limited and open-edition prints on various materials',
-      },
-      {
-        name: 'Custom Art',
-        description: 'Commissioned artwork based on customer requests',
-      },
-      {
-        name: 'Merchandise',
-        description: 'Artwork printed on various items like mugs and t-shirts',
-      },
-      {
-        name: 'Textile Art',
-        description: 'Designs for fabric, wrapping paper, and wallpaper',
-      },
-      {
-        name: 'Sculptures',
-        description: 'Original clay works and 3D-printed designs',
-      },
-      {
-        name: 'Collaborations',
-        description: 'Artwork available for licensing and commercial use',
-      },
-      {
-        name: 'Print-on-Demand',
-        description: 'Art applied to home decor items',
-      },
-    ]).returning();
+    const categoryData = [
+      { name: 'Original Art', description: 'One-of-a-kind original artworks' },
+      { name: 'Photography', description: 'Fine art photography prints' },
+      { name: 'Digital Art', description: 'Digital and mixed media artwork' },
+      { name: 'Sculptures', description: '3D artworks and sculptures' },
+      { name: 'Abstract', description: 'Abstract and contemporary art' }
+    ];
 
-    // Sample artworks for each category
-    const artworks = [];
-    const categoryArtworks = {
-      'Original Art': [
-        {
-          title: 'Abstract Sunset',
-          description: 'A vibrant abstract interpretation of a sunset using acrylic on canvas',
-          price: 1200.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-        {
-          title: 'Urban Landscape',
-          description: 'Oil painting depicting a modern cityscape at night',
-          price: 1500.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-      ],
-      'Photography': [
-        {
-          title: 'Mountain Serenity',
-          description: 'High-resolution photograph of mountain peaks at dawn',
-          price: 350.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-        {
-          title: 'Ocean Waves',
-          description: 'Black and white photograph of ocean waves',
-          price: 275.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-      ],
-      'Digital Art': [
-        {
-          title: 'Cyberpunk City',
-          description: 'Digital illustration of a futuristic cyberpunk cityscape',
-          price: 150.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-        {
-          title: 'Fantasy World Map',
-          description: 'Detailed digital map of an imaginary fantasy world',
-          price: 200.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-      ],
-      'Prints': [
-        {
-          title: 'Cherry Blossom Limited Edition',
-          description: 'Limited edition print of cherry blossoms, numbered and signed',
-          price: 180.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-        {
-          title: 'Vintage Botanical Collection',
-          description: 'Set of 4 botanical prints on archival paper',
-          price: 240.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-      ],
-      'Custom Art': [
-        {
-          title: 'Pet Portrait Commission',
-          description: 'Custom pet portrait in watercolor, size 11x14 inches',
-          price: 300.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-        {
-          title: 'Family Portrait Commission',
-          description: 'Custom family portrait in oil, size 16x20 inches',
-          price: 800.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-      ],
-      'Merchandise': [
-        {
-          title: 'Art Print T-Shirt',
-          description: 'Original artwork printed on premium cotton t-shirt',
-          price: 35.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-        {
-          title: 'Designer Coffee Mug',
-          description: 'Artistic design printed on 11oz ceramic mug',
-          price: 25.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-      ],
-      'Textile Art': [
-        {
-          title: 'Floral Pattern Fabric',
-          description: 'Original floral pattern printed on cotton fabric, per yard',
-          price: 45.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-        {
-          title: 'Abstract Wallpaper Design',
-          description: 'Modern abstract pattern wallpaper, per roll',
-          price: 85.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-      ],
-      'Sculptures': [
-        {
-          title: 'Modern Abstract Sculpture',
-          description: 'Bronze abstract sculpture, height 24 inches',
-          price: 2200.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-        {
-          title: '3D Printed Art Piece',
-          description: 'Complex geometric design 3D printed in metallic finish',
-          price: 450.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-      ],
-      'Collaborations': [
-        {
-          title: 'Commercial License - Abstract Series',
-          description: 'Commercial license for abstract art series, 1-year term',
-          price: 1500.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-        {
-          title: 'Brand Collaboration Package',
-          description: 'Custom artwork package for brand collaboration',
-          price: 3000.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-      ],
-      'Print-on-Demand': [
-        {
-          title: 'Designer Throw Pillow',
-          description: 'Original artwork printed on premium throw pillow',
-          price: 45.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-        {
-          title: 'Art Print Blanket',
-          description: 'Cozy throw blanket featuring original artwork',
-          price: 65.00,
-          imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg',
-        },
-      ],
-    };
+    const createdCategories = await db.insert(categories)
+      .values(categoryData)
+      .returning();
 
-    // Insert artworks for each category
-    for (const category of categories) {
-      const categoryArtworksList = categoryArtworks[category.name];
-      if (categoryArtworksList) {
-        for (const artwork of categoryArtworksList) {
-          artworks.push({
-            ...artwork,
-            categoryId: category.id,
-            artistId: admin[0].id,
-          });
-        }
+    // Artwork data with the provided images
+    const artworkData = [
+      {
+        title: 'Ethereal Waves',
+        description: 'Abstract fluid art with mesmerizing patterns',
+        price: 1200,
+        imageUrl: 'https://images.unsplash.com/photo-1621419203897-20b66b98d495',
+        categoryId: createdCategories[4].id, // Abstract
+        artistId: admin.id
+      },
+      {
+        title: 'Urban Reflections',
+        description: 'Contemporary urban photography',
+        price: 800,
+        imageUrl: 'https://images.unsplash.com/photo-1556379069-7c1b1b8990b0',
+        categoryId: createdCategories[1].id, // Photography
+        artistId: admin.id
+      },
+      {
+        title: 'Digital Dreams',
+        description: 'Digital art exploring surreal landscapes',
+        price: 950,
+        imageUrl: 'https://images.unsplash.com/photo-1530021853947-7d73da7acb70',
+        categoryId: createdCategories[2].id, // Digital Art
+        artistId: admin.id
+      },
+      {
+        title: 'Geometric Harmony',
+        description: 'Abstract geometric patterns in vibrant colors',
+        price: 1500,
+        imageUrl: 'https://images.unsplash.com/photo-1654240013739-77cdfccb68e0',
+        categoryId: createdCategories[4].id, // Abstract
+        artistId: admin.id
+      },
+      {
+        title: 'Nature\'s Canvas',
+        description: 'Fine art nature photography',
+        price: 750,
+        imageUrl: 'https://images.unsplash.com/photo-1604095087270-be6e0ea58fb0',
+        categoryId: createdCategories[1].id, // Photography
+        artistId: admin.id
+      },
+      {
+        title: 'Modern Expressions',
+        description: 'Contemporary abstract expressionism',
+        price: 2200,
+        imageUrl: 'https://images.unsplash.com/photo-1600812180022-e133da09c000',
+        categoryId: createdCategories[0].id, // Original Art
+        artistId: admin.id
+      },
+      {
+        title: 'Digital Fusion',
+        description: 'Mixed media digital artwork',
+        price: 1100,
+        imageUrl: 'https://plus.unsplash.com/premium_photo-1723600942485-b1c02c8a0a81',
+        categoryId: createdCategories[2].id, // Digital Art
+        artistId: admin.id
+      },
+      {
+        title: 'Sculptural Forms',
+        description: 'Abstract sculptural photography',
+        price: 1800,
+        imageUrl: 'https://plus.unsplash.com/premium_photo-1723575835595-b9d7c183d995',
+        categoryId: createdCategories[3].id, // Sculptures
+        artistId: admin.id
+      },
+      {
+        title: 'Urban Geometry',
+        description: 'Architectural photography art',
+        price: 900,
+        imageUrl: 'https://images.unsplash.com/photo-1579541814924-49fef17c5be5',
+        categoryId: createdCategories[1].id, // Photography
+        artistId: admin.id
+      },
+      {
+        title: 'Abstract Flow',
+        description: 'Fluid abstract art composition',
+        price: 1600,
+        imageUrl: 'https://images.unsplash.com/photo-1579762715118-a6f1d4b934f1',
+        categoryId: createdCategories[4].id, // Abstract
+        artistId: admin.id
+      },
+      {
+        title: 'Digital Landscapes',
+        description: 'Digital art exploring natural forms',
+        price: 1300,
+        imageUrl: 'https://images.unsplash.com/photo-1579541513287-3f17a5d8d62c',
+        categoryId: createdCategories[2].id, // Digital Art
+        artistId: admin.id
+      },
+      {
+        title: 'Sculptural Light',
+        description: 'Light and form in sculpture',
+        price: 2500,
+        imageUrl: 'https://images.unsplash.com/photo-1577083553180-732e5d4b2d39',
+        categoryId: createdCategories[3].id, // Sculptures
+        artistId: admin.id
+      },
+      {
+        title: 'Abstract Harmony',
+        description: 'Contemporary abstract composition',
+        price: 1900,
+        imageUrl: 'https://images.unsplash.com/photo-1579168730073-4541e40ca43a',
+        categoryId: createdCategories[4].id, // Abstract
+        artistId: admin.id
       }
-    }
+    ];
 
-    await db.insert(schema.artworks).values(artworks);
+    // Insert artworks
+    await db.insert(artworks).values(artworkData);
 
     console.log('Database seeded successfully!');
     process.exit(0);

@@ -188,22 +188,22 @@ export default function About() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
-                name: "Mutoni Gakuba",
+                name: "Rugamba Yvan",
                 role: "Founder & Creative Director",
                 image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"
               },
               {
-                name: "Jean-Pierre Habimana",
+                name: "Tussaint",
                 role: "Art Curator",
                 image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80"
               },
               {
-                name: "Claire Mugabo",
+                name: "M Audrey",
                 role: "Technology Lead",
                 image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=300&q=80"
               },
               {
-                name: "David Nkusi",
+                name: "Clarance Liberi",
                 role: "Artisan Relations",
                 image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80"
               }
