@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, decimal, uuid } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, decimal, uuid, boolean } from 'drizzle-orm/pg-core';
 import { relations, type InferModel } from 'drizzle-orm';
 
 export const users = pgTable('users', {
@@ -29,6 +29,7 @@ export const artworks = pgTable('artworks', {
   imageUrl: text('image_url').notNull(),
   categoryId: uuid('category_id').references(() => categories.id),
   artistId: uuid('artist_id').references(() => users.id),
+  isSold: boolean('is_sold').notNull().default(false),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });

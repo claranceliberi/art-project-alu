@@ -1,11 +1,12 @@
-
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Heart } from 'lucide-react'
-import { Artwork } from '@/lib/data'
+import { Heart, ShoppingCart } from 'lucide-react'
+import { Artwork } from '@/services/artwork.service'
 import { Button } from '@/components/ui/button'
 import { LazyImage } from './LazyImage'
 import { cn, formatPrice, generateArtworkUrl } from '@/lib/utils'
+import { useCart } from '@/contexts/CartContext'
+import { toast } from 'sonner'
 
 interface ArtworkCardProps {
   artwork: Artwork
@@ -20,6 +21,13 @@ export function ArtworkCard({
 }: ArtworkCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const artworkUrl = generateArtworkUrl(artwork)
+  const { addToCart } = useCart()
+  
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigation
+    addToCart(artwork);
+    toast.success('Added to cart');
+  };
   
   if (variant === 'featured') {
     return (
@@ -50,16 +58,21 @@ export function ArtworkCard({
             <div className="flex justify-between items-center">
               <span className="font-medium">{formatPrice(artwork.price)}</span>
               
-              <Button 
-                variant="secondary" 
-                size="sm"
-                className={cn(
-                  "bg-white text-primary py-1 px-3 rounded-full text-xs font-medium transition-opacity",
-                  isHovered ? "opacity-100" : "opacity-0"
-                )}
-              >
-                View Artwork
-              </Button>
+              {artwork.isSold ? (
+                <span className="text-sm font-medium text-white/90">Sold</span>
+              ) : (
+                <Button 
+                  variant="secondary" 
+                  size="sm"
+                  className={cn(
+                    "bg-white text-primary py-1 px-3 rounded-full text-xs font-medium transition-opacity",
+                    isHovered ? "opacity-100" : "opacity-0"
+                  )}
+                  onClick={handleAddToCart}
+                >
+                  Add to Cart
+                </Button>
+              )}
             </div>
           </div>
         </Link>
@@ -94,8 +107,13 @@ export function ArtworkCard({
               {artwork.isSold ? (
                 <span className="text-xs font-medium text-muted-foreground">Sold</span>
               ) : (
-                <Button variant="secondary" size="sm" className="text-xs">
-                  View
+                <Button 
+                  variant="secondary" 
+                  size="sm" 
+                  className="text-xs"
+                  onClick={handleAddToCart}
+                >
+                  Add to Cart
                 </Button>
               )}
             </div>
@@ -124,13 +142,26 @@ export function ArtworkCard({
             className="transition-transform duration-700 ease-out group-hover:scale-105"
           />
           
-          <Button
-            variant="secondary"
-            size="icon"
-            className="absolute top-3 right-3 rounded-full w-8 h-8 bg-white/80 text-foreground hover:bg-white z-10"
-          >
-            <Heart size={16} />
-          </Button>
+          <div className="absolute top-3 right-3 flex gap-2 z-10">
+            <Button
+              variant="secondary"
+              size="icon"
+              className="rounded-full w-8 h-8 bg-white/80 text-foreground hover:bg-white"
+            >
+              <Heart size={16} />
+            </Button>
+            
+            {!artwork.isSold && (
+              <Button
+                variant="secondary"
+                size="icon"
+                className="rounded-full w-8 h-8 bg-white/80 text-foreground hover:bg-white"
+                onClick={handleAddToCart}
+              >
+                <ShoppingCart size={16} />
+              </Button>
+            )}
+          </div>
           
           {artwork.isSold && (
             <div className="absolute top-3 left-3 bg-foreground/90 text-background text-xs font-medium py-1 px-2 rounded">

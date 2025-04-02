@@ -5,7 +5,9 @@ export interface User {
   name: string
   email: string
   role: UserRole
-  bio: string
+  bio?: string
+  profileImage?: string
+  isVerified?: boolean
   createdAt: string
   updatedAt: string
 }

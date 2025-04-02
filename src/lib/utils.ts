@@ -1,20 +1,17 @@
-
-import { clsx, type ClassValue } from "clsx"
+import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatPrice(price: number): string {
-  // Convert price from USD to RWF (approximately 1 USD = 1200 RWF, but this is just an example rate)
-  const rwfPrice = price * 1200;
-  
-  return new Intl.NumberFormat('en-RW', {
+export function formatPrice(price: number) {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'RWF',
-    maximumFractionDigits: 0, // RWF doesn't typically use decimal places
-  }).format(rwfPrice)
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
 }
 
 export function truncateText(text: string, maxLength: number): string {
@@ -22,12 +19,12 @@ export function truncateText(text: string, maxLength: number): string {
   return text.slice(0, maxLength) + '...'
 }
 
-export function generateArtworkUrl(artwork: { id: string; title: string }): string {
+export function generateArtworkUrl(artwork: { id: string; title: string }) {
   const slug = artwork.title
     .toLowerCase()
-    .replace(/[^\w\s]/gi, '')
-    .replace(/\s+/g, '-')
-  return `/artwork/${artwork.id}/${slug}`
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  return `/artworks/${artwork.id}/${slug}`;
 }
 
 export function delay(ms: number): Promise<void> {
