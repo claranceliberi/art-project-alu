@@ -1,1 +1,0 @@
-ALTER TABLE "artworks" DROP COLUMN IF EXISTS "is_sold";

@@ -15,8 +15,6 @@ import { userRoutes } from './routes/users';
 import { artworkRoutes } from './routes/artworks';
 import { categoryRoutes } from './routes/categories';
 import { transactionRoutes } from './routes/transactions';
-import { artistRoutes } from './routes/artists';
-import { checkoutRoutes } from './routes/checkout';
 
 const app = new Hono();
 
@@ -37,8 +35,6 @@ app.route('/api/users', userRoutes);
 app.route('/api/artworks', artworkRoutes);
 app.route('/api/categories', categoryRoutes);
 app.route('/api/transactions', transactionRoutes);
-app.route('/api/artists', artistRoutes);
-app.route('/api/checkout', checkoutRoutes);
 
 // Error handling
 app.onError((err: any, c) => {

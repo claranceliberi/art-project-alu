@@ -7,10 +7,6 @@ export const swaggerConfig = {
   },
   servers: [
     {
-      url: 'https://api-icy-sea-7991.fly.dev',
-      description: 'Production server',
-    },
-    {
       url: 'http://localhost:3000',
       description: 'Development server',
     },

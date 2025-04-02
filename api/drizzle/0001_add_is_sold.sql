@@ -1,1 +1,0 @@
-ALTER TABLE artworks ADD COLUMN is_sold BOOLEAN NOT NULL DEFAULT false; 

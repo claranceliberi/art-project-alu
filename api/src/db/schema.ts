@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, decimal, uuid, boolean } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, decimal, uuid } from 'drizzle-orm/pg-core';
 import { relations, type InferModel } from 'drizzle-orm';
 
 export const users = pgTable('users', {
@@ -29,7 +29,6 @@ export const artworks = pgTable('artworks', {
   imageUrl: text('image_url').notNull(),
   categoryId: uuid('category_id').references(() => categories.id),
   artistId: uuid('artist_id').references(() => users.id),
-  quantity: decimal('quantity', { precision: 10, scale: 0 }).notNull().default('1'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -40,7 +39,6 @@ export const transactions = pgTable('transactions', {
   status: text('status').notNull().default('pending'),
   buyerId: uuid('buyer_id').references(() => users.id),
   artworkId: uuid('artwork_id').references(() => artworks.id),
-  shippingAddress: text('shipping_address').notNull(),
   transactionDate: timestamp('transaction_date').defaultNow(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
