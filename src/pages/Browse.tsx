@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { Layout } from '@/components/layout/Layout'
 import { Section } from '@/components/ui-custom/Section'
 import { ArtworkCard } from '@/components/ui-custom/ArtworkCard'
 import { cn } from '@/lib/utils'
@@ -333,12 +332,10 @@ function BrowseContent() {
   );
 }
 
-export  function Browse() {
+export function Browse() {
   return (
-    <Layout>
-      <ErrorBoundary>
-        <BrowseContent />
-      </ErrorBoundary>
-    </Layout>
+    <ErrorBoundary>
+      <BrowseContent />
+    </ErrorBoundary>
   );
 }
