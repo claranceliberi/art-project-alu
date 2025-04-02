@@ -59,15 +59,13 @@ export function Checkout() {
 
       const response = await checkoutService.checkout(checkoutData)
       
-      if (response.status === 'success') {
-        clearCart()
-        toast.success('Order placed successfully!')
-        navigate('/account/orders')
-      } else {
-        toast.error('Failed to place order. Please try again.')
-      }
-    } catch (error) {
-      toast.error('An error occurred. Please try again.')
+      // Always clear cart and show success message if we get here
+      clearCart()
+      toast.success(response.message || 'Order placed successfully!')
+      navigate('/account/orders')
+    } catch (error: any) {
+      // Show the specific error message if available
+      toast.error(error.response?.data?.error || 'An error occurred. Please try again.')
       console.error('Checkout error:', error)
     } finally {
       setIsSubmitting(false)

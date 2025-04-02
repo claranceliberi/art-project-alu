@@ -19,9 +19,20 @@ export const cartService = {
     const existingItem = cart.find(item => item.artwork.id === artwork.id);
 
     if (existingItem) {
-      existingItem.quantity += quantity;
+      // Check if adding more would exceed available quantity
+      const newQuantity = existingItem.quantity + quantity;
+      if (newQuantity <= artwork.quantity) {
+        existingItem.quantity = newQuantity;
+      } else {
+        throw new Error(`Cannot add more items than available (${artwork.quantity})`);
+      }
     } else {
-      cart.push({ artwork, quantity });
+      // Check if initial quantity is available
+      if (quantity <= artwork.quantity) {
+        cart.push({ artwork, quantity });
+      } else {
+        throw new Error(`Cannot add more items than available (${artwork.quantity})`);
+      }
     }
 
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
@@ -40,8 +51,13 @@ export const cartService = {
     const item = cart.find(item => item.artwork.id === artworkId);
     
     if (item) {
-      item.quantity = Math.max(1, quantity);
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+      // Check if new quantity is available
+      if (quantity <= item.artwork.quantity) {
+        item.quantity = Math.max(1, quantity);
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+      } else {
+        throw new Error(`Cannot set quantity higher than available (${item.artwork.quantity})`);
+      }
     }
     
     return cart;

@@ -39,7 +39,7 @@ router.post('/', async (c) => {
 
       // Process each item in the order
       for (const item of validatedData.items) {
-        // Check if artwork exists and is not already sold
+        // Check if artwork exists and has enough quantity
         const artwork = await tx.query.artworks.findFirst({
           where: eq(schema.artworks.id, item.artwork.id),
         });
@@ -48,16 +48,14 @@ router.post('/', async (c) => {
           throw new Error(`Artwork ${item.artwork.id} not found`);
         }
 
-        // Check if there's any completed transaction for this artwork
-        const existingTransaction = await tx.query.transactions.findFirst({
-          where: and(
-            eq(schema.transactions.artworkId, item.artwork.id),
-            eq(schema.transactions.status, 'completed')
-          ),
-        });
+        const currentQuantity = Number(artwork.quantity);
+        if (currentQuantity < item.quantity) {
+          throw new Error(`Insufficient quantity available for ${item.artwork.title}`);
+        }
 
-        if (existingTransaction) {
-          throw new Error(`Artwork ${item.artwork.title} is already sold`);
+        // Check if artwork is already sold out
+        if (currentQuantity === 0) {
+          throw new Error(`Artwork ${item.artwork.title} is sold out`);
         }
 
         // Create transaction for this item
@@ -72,9 +70,12 @@ router.post('/', async (c) => {
 
         transactionIds.push(newTransaction[0].id);
 
-        // Mark artwork as sold
+        // Update artwork quantity
+        const newQuantity = (currentQuantity - item.quantity).toString();
         await tx.update(schema.artworks)
-          .set({ isSold: true })
+          .set({ 
+            quantity: newQuantity
+          })
           .where(eq(schema.artworks.id, item.artwork.id));
       }
 

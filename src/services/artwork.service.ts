@@ -8,6 +8,7 @@ export interface Artwork {
   imageUrl: string;
   thumbnailUrl: string;
   price: number;
+  quantity: number;
   medium: string;
   dimensions: {
     width: number;
@@ -19,7 +20,6 @@ export interface Artwork {
   artistId: string;
   artistName: string;
   year: number;
-  isSold: boolean;
   isFeatured: boolean;
   createdAt: string;
   updatedAt: string;

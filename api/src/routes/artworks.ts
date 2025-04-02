@@ -48,7 +48,7 @@ router.get('/', async (c) => {
       whereConditions.push(sql`${schema.artworks.price} <= ${maxPrice}`);
     }
     if (available) {
-      whereConditions.push(eq(schema.artworks.isSold, false));
+      whereConditions.push(sql`${schema.artworks.quantity} > 0`);
     }
 
     // Build order by
@@ -61,30 +61,55 @@ router.get('/', async (c) => {
       orderBy = desc(schema.artworks.createdAt);
     }
 
-    // Get total count
-    const [{ count }] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(schema.artworks)
-      .where(and(...whereConditions));
+    // Combine count and data query into a single query
+    const [countResult, artworks] = await Promise.all([
+      db.select({ count: sql<number>`count(*)::int` })
+        .from(schema.artworks)
+        .where(and(...whereConditions)),
+      db.query.artworks.findMany({
+        where: and(...whereConditions),
+        orderBy,
+        limit,
+        offset,
+        columns: {
+          id: true,
+          title: true,
+          description: true,
+          price: true,
+          imageUrl: true,
+          quantity: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        with: {
+          artist: {
+            columns: {
+              id: true,
+              name: true,
+            },
+          },
+          category: {
+            columns: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      }),
+    ]);
 
-    // Get paginated artworks
-    const artworks = await db.query.artworks.findMany({
-      where: and(...whereConditions),
-      orderBy,
-      limit,
-      offset,
-      with: {
-        artist: true,
-        category: true,
-      },
-    });
-
-    return c.json({
-      artworks,
-      total: Number(count),
+    const result = {
+      artworks: artworks.map(artwork => ({
+        ...artwork,
+        artistName: artwork.artist?.name ?? 'Unknown Artist',
+        categoryName: artwork.category?.name ?? 'Uncategorized',
+      })),
+      total: countResult[0].count,
       page,
       limit,
-    });
+    };
+
+    return c.json(result);
   } catch (error) {
     console.error('Error fetching artworks:', error);
     return c.json({ error: 'Failed to fetch artworks' }, 500);

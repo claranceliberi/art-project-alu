@@ -1,6 +1,6 @@
 import { api } from '@/lib/api-client'
 import { API_ENDPOINTS } from '@/lib/endpoints'
-import type { CartItem } from '@/contexts/CartContext'
+import type { CartItem } from '@/services/cart.service'
 
 export interface CheckoutData {
   items: CartItem[]
@@ -12,6 +12,12 @@ export interface CheckoutData {
     country: string
     postalCode: string
   }
+}
+
+interface ApiResponse {
+  transactionIds: string[]
+  message?: string
+  status: string
 }
 
 export interface CheckoutResponse {
@@ -36,7 +42,12 @@ export const checkoutService = {
       }))
     }
     
-    const response = await api.post(API_ENDPOINTS.checkout, formattedData)
-    return response.data
+    const response = await api.post<ApiResponse>(API_ENDPOINTS.checkout, formattedData)
+    return {
+      orderId: response.transactionIds[0], // Use first transaction ID as order ID
+      status: 'success',
+      message: response.message || 'Order placed successfully',
+      transactionIds: response.transactionIds
+    }
   }
 } 

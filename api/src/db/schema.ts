@@ -29,7 +29,7 @@ export const artworks = pgTable('artworks', {
   imageUrl: text('image_url').notNull(),
   categoryId: uuid('category_id').references(() => categories.id),
   artistId: uuid('artist_id').references(() => users.id),
-  isSold: boolean('is_sold').notNull().default(false),
+  quantity: decimal('quantity', { precision: 10, scale: 0 }).notNull().default('1'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
