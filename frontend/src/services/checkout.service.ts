@@ -1,5 +1,5 @@
 import { api } from '@/lib/api-client'
-import { API_ENDPOINTS } from '@/lib/endpoints'
+import { API_ENDPOINTS } from '@/config/api'
 import type { CartItem } from '@/services/cart.service'
 
 export interface CheckoutData {
@@ -28,6 +28,8 @@ export interface CheckoutResponse {
 }
 
 export const checkoutService = {
+  createCheckout: (data: CheckoutData) => api.post<ApiResponse>(API_ENDPOINTS.checkout, data),
+
   async checkout(data: CheckoutData): Promise<CheckoutResponse> {
     // Format the data to match backend expectations
     const formattedData = {

@@ -23,6 +23,13 @@ export interface Artwork {
   isFeatured: boolean;
   createdAt: string;
   updatedAt: string;
+  category?: {
+    id: string;
+    name: string;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+  };
 }
 
 export interface ArtworkResponse {
@@ -107,6 +114,10 @@ export const artworkService = {
     }
     
     return api.get<ArtworkResponse>(`${API_ENDPOINTS.artworks}?${queryParams.toString()}`);
+  },
+
+  getMyArtworks: () => {
+    return api.get<ArtworkResponse>(`${API_ENDPOINTS.artworks}/my-artworks`);
   },
   
   create: async (data: CreateArtworkData) => {

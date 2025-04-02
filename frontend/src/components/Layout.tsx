@@ -4,10 +4,12 @@ import { ShoppingCart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { CartDrawer } from '@/components/ui-custom/CartDrawer'
 import { useCart } from '@/contexts/CartContext'
+import { useAuth } from '../contexts/AuthContext'
 
 export function Layout() {
   const [isCartOpen, setIsCartOpen] = useState(false)
   const { getTotalItems } = useCart()
+  const { user, signout } = useAuth()
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -42,6 +44,42 @@ export function Layout() {
               )}
             </Button>
           </nav>
+
+          <div className="flex items-center space-x-4">
+            {user ? (
+              <>
+                {user.role === 'artist' && (
+                  <Link
+                    to="/artist/artworks"
+                    className="text-sm font-medium"
+                  >
+                    My Artworks
+                  </Link>
+                )}
+                <button
+                  onClick={signout}
+                  className="text-sm font-medium text-destructive hover:text-destructive/90"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/signin"
+                  className="text-sm font-medium"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/signup"
+                  className="text-sm font-medium"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       </header>
 
