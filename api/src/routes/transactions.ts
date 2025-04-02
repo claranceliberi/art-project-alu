@@ -11,7 +11,6 @@ const createTransactionSchema = z.object({
   buyerId: z.string().uuid(),
   artworkId: z.string().uuid(),
   status: z.enum(['pending', 'completed', 'failed']).default('pending'),
-  shippingAddress: z.string(),
 });
 
 const updateTransactionSchema = z.object({
@@ -109,8 +108,7 @@ router.post('/', async (c) => {
     // Create transaction
     const newTransaction = await db.insert(schema.transactions).values({
       ...validatedData,
-      amount: artwork.price.toString(),
-      shippingAddress: validatedData.shippingAddress,
+      amount: artwork.price,
     }).returning();
 
     return c.json(newTransaction[0], 201);

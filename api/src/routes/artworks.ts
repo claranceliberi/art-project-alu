@@ -101,7 +101,6 @@ router.get('/', async (c) => {
       limit,
     });
   } catch (error) {
-    console.error('Error fetching artworks:', error);
     return c.json({ error: 'Failed to fetch artworks' }, 500);
   }
 });

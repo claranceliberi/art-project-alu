@@ -35,7 +35,7 @@ async function seed() {
       {
         title: 'Ethereal Waves',
         description: 'Abstract fluid art with mesmerizing patterns',
-        price: '1200.00',
+        price: 1200,
         imageUrl: 'https://images.unsplash.com/photo-1621419203897-20b66b98d495',
         categoryId: createdCategories[4].id, // Abstract
         artistId: admin.id
@@ -43,7 +43,7 @@ async function seed() {
       {
         title: 'Urban Reflections',
         description: 'Contemporary urban photography',
-        price: '800.00',
+        price: 800,
         imageUrl: 'https://images.unsplash.com/photo-1556379069-7c1b1b8990b0',
         categoryId: createdCategories[1].id, // Photography
         artistId: admin.id
@@ -51,7 +51,7 @@ async function seed() {
       {
         title: 'Digital Dreams',
         description: 'Digital art exploring surreal landscapes',
-        price: '950.00',
+        price: 950,
         imageUrl: 'https://images.unsplash.com/photo-1530021853947-7d73da7acb70',
         categoryId: createdCategories[2].id, // Digital Art
         artistId: admin.id
@@ -59,7 +59,7 @@ async function seed() {
       {
         title: 'Geometric Harmony',
         description: 'Abstract geometric patterns in vibrant colors',
-        price: '1500.00',
+        price: 1500,
         imageUrl: 'https://images.unsplash.com/photo-1654240013739-77cdfccb68e0',
         categoryId: createdCategories[4].id, // Abstract
         artistId: admin.id
@@ -67,7 +67,7 @@ async function seed() {
       {
         title: 'Nature\'s Canvas',
         description: 'Fine art nature photography',
-        price: '750.00',
+        price: 750,
         imageUrl: 'https://images.unsplash.com/photo-1604095087270-be6e0ea58fb0',
         categoryId: createdCategories[1].id, // Photography
         artistId: admin.id
@@ -75,7 +75,7 @@ async function seed() {
       {
         title: 'Modern Expressions',
         description: 'Contemporary abstract expressionism',
-        price: '2200.00',
+        price: 2200,
         imageUrl: 'https://images.unsplash.com/photo-1600812180022-e133da09c000',
         categoryId: createdCategories[0].id, // Original Art
         artistId: admin.id
@@ -83,7 +83,7 @@ async function seed() {
       {
         title: 'Digital Fusion',
         description: 'Mixed media digital artwork',
-        price: '1100.00',
+        price: 1100,
         imageUrl: 'https://plus.unsplash.com/premium_photo-1723600942485-b1c02c8a0a81',
         categoryId: createdCategories[2].id, // Digital Art
         artistId: admin.id
@@ -91,7 +91,7 @@ async function seed() {
       {
         title: 'Sculptural Forms',
         description: 'Abstract sculptural photography',
-        price: '1800.00',
+        price: 1800,
         imageUrl: 'https://plus.unsplash.com/premium_photo-1723575835595-b9d7c183d995',
         categoryId: createdCategories[3].id, // Sculptures
         artistId: admin.id
@@ -99,7 +99,7 @@ async function seed() {
       {
         title: 'Urban Geometry',
         description: 'Architectural photography art',
-        price: '900.00',
+        price: 900,
         imageUrl: 'https://images.unsplash.com/photo-1579541814924-49fef17c5be5',
         categoryId: createdCategories[1].id, // Photography
         artistId: admin.id
@@ -107,7 +107,7 @@ async function seed() {
       {
         title: 'Abstract Flow',
         description: 'Fluid abstract art composition',
-        price: '1600.00',
+        price: 1600,
         imageUrl: 'https://images.unsplash.com/photo-1579762715118-a6f1d4b934f1',
         categoryId: createdCategories[4].id, // Abstract
         artistId: admin.id
@@ -115,7 +115,7 @@ async function seed() {
       {
         title: 'Digital Landscapes',
         description: 'Digital art exploring natural forms',
-        price: '1300.00',
+        price: 1300,
         imageUrl: 'https://images.unsplash.com/photo-1579541513287-3f17a5d8d62c',
         categoryId: createdCategories[2].id, // Digital Art
         artistId: admin.id
@@ -123,7 +123,7 @@ async function seed() {
       {
         title: 'Sculptural Light',
         description: 'Light and form in sculpture',
-        price: '2500.00',
+        price: 2500,
         imageUrl: 'https://images.unsplash.com/photo-1577083553180-732e5d4b2d39',
         categoryId: createdCategories[3].id, // Sculptures
         artistId: admin.id
@@ -131,7 +131,7 @@ async function seed() {
       {
         title: 'Abstract Harmony',
         description: 'Contemporary abstract composition',
-        price: '1900.00',
+        price: 1900,
         imageUrl: 'https://images.unsplash.com/photo-1579168730073-4541e40ca43a',
         categoryId: createdCategories[4].id, // Abstract
         artistId: admin.id

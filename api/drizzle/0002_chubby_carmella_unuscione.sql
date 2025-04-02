@@ -1,1 +1,0 @@
-ALTER TABLE "artworks" ADD COLUMN "quantity" numeric(10, 0) DEFAULT '1' NOT NULL;

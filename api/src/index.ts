@@ -16,8 +16,6 @@ dotenv.config();
 import { userRoutes } from './routes/users';
 import { categoryRoutes } from './routes/categories';
 import { transactionRoutes } from './routes/transactions';
-import { artistRoutes } from './routes/artists';
-import { checkoutRoutes } from './routes/checkout';
 
 const app = new Hono();
 

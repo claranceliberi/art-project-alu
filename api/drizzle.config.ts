@@ -10,4 +10,5 @@ export default {
     connectionString: process.env.DATABASE_URL!,
   },
   verbose: true,
+  strict: true,
 } satisfies Config; 
