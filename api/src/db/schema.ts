@@ -40,6 +40,7 @@ export const transactions = pgTable('transactions', {
   status: text('status').notNull().default('pending'),
   buyerId: uuid('buyer_id').references(() => users.id),
   artworkId: uuid('artwork_id').references(() => artworks.id),
+  shippingAddress: text('shipping_address').notNull(),
   transactionDate: timestamp('transaction_date').defaultNow(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),

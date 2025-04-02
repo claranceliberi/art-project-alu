@@ -6,6 +6,7 @@ import { Home } from '@/pages/Home'
 import { Browse } from '@/pages/Browse'
 import { Artists } from '@/pages/Artists'
 import { About } from '@/pages/About'
+import { Checkout } from '@/pages/Checkout'
 import { CartProvider } from '@/contexts/CartContext'
 
 const queryClient = new QueryClient()
@@ -21,6 +22,7 @@ export default function App() {
               <Route path="/browse" element={<Browse />} />
               <Route path="/artists" element={<Artists />} />
               <Route path="/about" element={<About />} />
+              <Route path="/checkout" element={<Checkout />} />
             </Route>
           </Routes>
           <Toaster />
