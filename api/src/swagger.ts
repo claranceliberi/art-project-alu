@@ -130,6 +130,48 @@ export const swaggerConfig = {
         },
       },
     },
+    '/api/artworks/my-artworks': {
+      get: {
+        summary: 'Get logged-in artist\'s artworks',
+        tags: ['Artworks'],
+        security: [{ bearerAuth: [] }],
+        responses: {
+          '200': {
+            description: 'List of artist\'s artworks',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/components/schemas/Artwork',
+                  },
+                },
+              },
+            },
+          },
+          '401': {
+            description: 'Unauthorized - Not logged in',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '403': {
+            description: 'Forbidden - Not an artist',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     '/api/artworks/{id}': {
       get: {
         summary: 'Get artwork by ID',
@@ -554,6 +596,118 @@ export const swaggerConfig = {
         },
       },
     },
+    '/api/auth/signup': {
+      post: {
+        summary: 'Create a new user account',
+        tags: ['Authentication'],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/SignupInput',
+              },
+            },
+          },
+        },
+        responses: {
+          '201': {
+            description: 'User created successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    user: {
+                      $ref: '#/components/schemas/User',
+                    },
+                    token: {
+                      type: 'string',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          '400': {
+            description: 'Validation error or user already exists',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '500': {
+            description: 'Server error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/api/auth/signin': {
+      post: {
+        summary: 'Sign in to an existing account',
+        tags: ['Authentication'],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/SigninInput',
+              },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'User signed in successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    user: {
+                      $ref: '#/components/schemas/User',
+                    },
+                    token: {
+                      type: 'string',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          '401': {
+            description: 'Invalid credentials',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '500': {
+            description: 'Server error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   },
   components: {
     schemas: {
@@ -682,6 +836,24 @@ export const swaggerConfig = {
         required: ['status'],
         properties: {
           status: { type: 'string', enum: ['pending', 'completed', 'failed'] },
+        },
+      },
+      SignupInput: {
+        type: 'object',
+        required: ['name', 'email', 'password'],
+        properties: {
+          name: { type: 'string', minLength: 2 },
+          email: { type: 'string', format: 'email' },
+          password: { type: 'string', minLength: 6 },
+          role: { type: 'string', enum: ['user', 'artist'], default: 'user' },
+        },
+      },
+      SigninInput: {
+        type: 'object',
+        required: ['email', 'password'],
+        properties: {
+          email: { type: 'string', format: 'email' },
+          password: { type: 'string' },
         },
       },
     },

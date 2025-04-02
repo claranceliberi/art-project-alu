@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
 import { db, schema } from '../db';
-import { eq, ilike } from 'drizzle-orm';
+import { eq, ilike, sql } from 'drizzle-orm';
 
 const router = new Hono();
 
@@ -15,21 +15,27 @@ const createCategorySchema = z.object({
 router.get('/', async (c) => {
   try {
     const name = c.req.query('name');
+    
+    // Simple query to get categories with artwork count
+    const categories = await db
+      .select({
+        id: schema.categories.id,
+        name: schema.categories.name,
+        description: schema.categories.description,
+        artworkCount: sql<number>`count(${schema.artworks.id})::int`,
+      })
+      .from(schema.categories)
+      .leftJoin(schema.artworks, eq(schema.categories.id, schema.artworks.categoryId))
+      .groupBy(schema.categories.id, schema.categories.name, schema.categories.description)
+      .orderBy(schema.categories.name);
+
     if (name) {
-      const category = await db.query.categories.findFirst({
-        where: ilike(schema.categories.name, name),
-        with: {
-          artworks: true,
-        },
-      });
-      return c.json(category);
+      const filteredCategory = categories.find(cat => 
+        cat.name.toLowerCase().includes(name.toLowerCase())
+      );
+      return c.json(filteredCategory || null);
     }
 
-    const categories = await db.query.categories.findMany({
-      with: {
-        artworks: true,
-      },
-    });
     return c.json(categories);
   } catch (error) {
     console.error('Error fetching categories:', error);
