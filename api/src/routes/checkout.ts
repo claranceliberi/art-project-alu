@@ -1,97 +1,121 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { db, schema } from '../db';
-import { eq, and } from 'drizzle-orm';
+import { db } from '../db';
+import { transactions, artworks } from '../db/schema';
 import { authenticateToken } from '../middleware/auth';
+import { PaymentService } from '../services/payment';
+import { eq } from 'drizzle-orm';
 
-const router = new Hono();
+const app = new Hono();
 
 // Validation schema for checkout request
 const checkoutSchema = z.object({
   items: z.array(z.object({
-    artworkId: z.string().uuid(),
-    quantity: z.number().int().positive(),
-    price: z.number().positive()
+    artworkId: z.string(),
+    quantity: z.number().positive(),
+    price: z.number().positive(),
   })),
-  buyerId: z.string().uuid(),
+  buyerId: z.string(),
   shippingAddress: z.object({
-    fullName: z.string().min(1),
-    streetAddress: z.string().min(1),
-    city: z.string().min(1),
-    state: z.string().min(1),
-    zipCode: z.string().min(1),
-    country: z.string().min(1)
-  })
+    fullName: z.string(),
+    streetAddress: z.string(),
+    city: z.string(),
+    state: z.string(),
+    zipCode: z.string(),
+    country: z.string(),
+  }),
 });
 
-router.post('/', authenticateToken, async (c) => {
+app.post('/', authenticateToken, async (c) => {
   try {
     const body = await c.req.json();
-    console.log('Checkout request body:', body);
-    
     const validatedData = checkoutSchema.parse(body);
-    console.log('Validated checkout data:', validatedData);
-    
+
+    // Verify buyer ID matches authenticated user
     const user = c.get('user');
-    console.log('Authenticated user:', user);
-
-    // Verify the buyer ID matches the authenticated user
-    if (validatedData.buyerId !== user.userId) {
-      return c.json({ error: 'Unauthorized' }, 403);
+    if (user.userId !== validatedData.buyerId) {
+      return c.json({ error: 'Unauthorized' }, 401);
     }
 
-    // Process each item in the cart
-    const transactions = [];
-    for (const item of validatedData.items) {
-      console.log('Processing item:', item);
-      
-      // Check if artwork exists and is not already sold
-      const artwork = await db.query.artworks.findFirst({
-        where: eq(schema.artworks.id, item.artworkId),
-      });
+    // Calculate total amount
+    const totalAmount = validatedData.items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
 
-      if (!artwork) {
-        return c.json({ error: `Artwork ${item.artworkId} not found` }, 404);
-      }
+    // Create payment request
+    const paymentService = PaymentService.getInstance();
+    const paymentRequest = await paymentService.createPaymentRequest({
+      amount: totalAmount,
+      currency: 'USD',
+      description: 'Artwork purchase',
+      customerName: validatedData.shippingAddress.fullName,
+      customerEmail: '', // We'll need to get this from the user profile
+      customerPhone: '', // We'll need to get this from the user profile
+      orderId: `ORDER-${Date.now()}`,
+      paymentItems: validatedData.items.map(item => ({
+        code: item.artworkId,
+        quantity: item.quantity,
+        unitAmount: item.price,
+      })),
+    });
 
-      console.log('Found artwork:', artwork);
+    // Create transactions for each item
+    const createdTransactions = await Promise.all(
+      validatedData.items.map(async (item) => {
+        // Check if artwork exists and is not sold
+        const artwork = await db.query.artworks.findFirst({
+          where: eq(artworks.id, item.artworkId),
+        });
 
-      // Check if there's any completed transaction for this artwork
-      const existingTransaction = await db.query.transactions.findFirst({
-        where: and(
-          eq(schema.transactions.artworkId, item.artworkId),
-          eq(schema.transactions.status, 'completed')
-        ),
-      });
+        if (!artwork) {
+          throw new Error(`Artwork ${item.artworkId} not found`);
+        }
 
-      if (existingTransaction) {
-        return c.json({ error: `Artwork ${item.artworkId} is already sold` }, 400);
-      }
+        // Check if artwork is already sold by looking for a completed transaction
+        const existingTransaction = await db.query.transactions.findFirst({
+          where: eq(transactions.artworkId, item.artworkId),
+        });
 
-      // Create transaction for each item
-      const [transaction] = await db.insert(schema.transactions).values({
-        amount: (item.price * item.quantity).toString(),
-        buyerId: validatedData.buyerId,
-        artworkId: item.artworkId,
-        status: 'pending',
-        shippingAddress: validatedData.shippingAddress
-      }).returning();
+        if (existingTransaction?.status === 'completed') {
+          throw new Error(`Artwork ${item.artworkId} is already sold`);
+        }
 
-      console.log('Created transaction:', transaction);
-      transactions.push(transaction);
-    }
+        // Create transaction
+        const [transaction] = await db
+          .insert(transactions)
+          .values({
+            amount: (item.price * item.quantity).toString(),
+            status: 'pending',
+            buyerId: validatedData.buyerId,
+            artworkId: item.artworkId,
+            shippingAddress: validatedData.shippingAddress,
+            transactionDate: new Date(),
+            invoiceNumber: paymentRequest.invoiceNumber,
+          })
+          .returning();
+
+        return transaction;
+      })
+    );
 
     return c.json({
-      message: 'Checkout processed successfully',
-      transactions
+      success: true,
+      data: {
+        transactions: createdTransactions,
+        checkoutUrl: paymentRequest.checkoutUrl,
+      },
     });
   } catch (error) {
-    console.error('Checkout error:', error);
+    console.error('Checkout failed:', error);
     if (error instanceof z.ZodError) {
-      return c.json({ error: error.errors }, 400);
+      return c.json({ error: 'Invalid request data', details: error.errors }, 400);
     }
-    return c.json({ error: `Failed to process checkout: ${error.message}` }, 500);
+    if (error instanceof Error) {
+      return c.json({ error: 'Failed to process checkout', details: error.message }, 500);
+    }
+    return c.json({ error: 'Failed to process checkout', details: 'Unknown error' }, 500);
   }
 });
 
-export { router as checkoutRoutes }; 
+export default app; 

@@ -12,6 +12,12 @@ import { api } from '@/lib/api-client'
 import { API_ENDPOINTS } from '@/config/api'
 import { useMutation } from '@tanstack/react-query'
 
+interface CheckoutResponse {
+  message: string;
+  transactions: any[];
+  checkoutUrl: string;
+}
+
 export default function Cart() {
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -57,7 +63,7 @@ export default function Cart() {
       }
 
       // Send all cart items to the checkout endpoint
-      const response = await api.post(API_ENDPOINTS.checkout, {
+      const response = await api.post<CheckoutResponse>(API_ENDPOINTS.checkout, {
         items: state.items.map(item => ({
           artworkId: item.artwork.id,
           quantity: item.quantity,
@@ -67,12 +73,15 @@ export default function Cart() {
         shippingAddress
       })
 
-      return response
+      return response.data as CheckoutResponse
     },
-    onSuccess: () => {
-      toast.success('Checkout successful! Your order is being processed.')
+    onSuccess: (data) => {
+      toast.success('Checkout initiated! Redirecting to payment...')
+      // Open checkout URL in a new tab
+      window.open(data.checkoutUrl, '_blank')
+      // Clear cart and redirect to profile
       clearCart()
-      navigate('/profile') // Redirect to profile where they can see their orders
+      navigate('/profile')
     },
     onError: (error: Error) => {
       toast.error(`Checkout failed: ${error.message}`)

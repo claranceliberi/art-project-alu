@@ -1,61 +1,63 @@
-import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { prettyJSON } from 'hono/pretty-json';
-import { swaggerUI } from '@hono/swagger-ui';
-import { swaggerConfig } from './swagger';
-import dotenv from 'dotenv';
-import { authRoutes } from './routes/auth';
+import { serve } from '@hono/node-server';
+import { config } from 'dotenv';
+import { migrate } from 'drizzle-orm/bun-sqlite/migrator';
+import { db } from './db';
+import { artworks } from './db/schema';
 import { artworkRoutes } from './routes/artworks';
+import { authRoutes } from './routes/auth';
+import checkoutRoutes from './routes/checkout';
+import { transactionRoutes } from './routes/transactions';
+import { categoryRoutes } from './routes/categories';
 import { artistRoutes } from './routes/artists';
+import { userRoutes } from './routes/users';
 
 // Load environment variables
-dotenv.config();
-
-// Import routes
-import { userRoutes } from './routes/users';
-import { categoryRoutes } from './routes/categories';
-import { transactionRoutes } from './routes/transactions';
-import { checkoutRoutes } from './routes/checkout';
+config();
 
 const app = new Hono();
 
 // Middleware
 app.use('*', logger());
-app.use('*', cors({
-  origin: '*',
-  allowMethods: ['*'],
-  allowHeaders: ['*'],
-  credentials: true,
-  exposeHeaders: ['*'],
-}));
+app.use('*', cors());
 app.use('*', prettyJSON());
 
-// Swagger UI
-app.get('/swagger', swaggerUI({ url: '/swagger.json' }));
-app.get('/swagger.json', (c) => c.json(swaggerConfig));
-
-// Health check
-app.get('/', (c) => c.json({ status: 'ok' }));
-
 // Routes
-app.route('/api/auth', authRoutes);
-app.route('/api/users', userRoutes);
-app.route('/api/categories', categoryRoutes);
-app.route('/api/transactions', transactionRoutes);
-app.route('/api/checkout', checkoutRoutes);
-app.route('/api/artists', artistRoutes);
 app.route('/api/artworks', artworkRoutes);
+app.route('/api/auth', authRoutes);
+app.route('/api/checkout', checkoutRoutes);
+app.route('/api/transactions', transactionRoutes);
+app.route('/api/categories', categoryRoutes);
+app.route('/api/artists', artistRoutes);
+app.route('/api/users', userRoutes);
+
+// Health check endpoint
+app.get('/health', (c) => c.json({ status: 'ok' }));
+
+// Run migrations
+const runMigrations = async () => {
+  try {
+    await migrate(db, { migrationsFolder: './drizzle' });
+    console.log('Migrations completed successfully');
+  } catch (error) {
+    console.error('Error running migrations:', error);
+    process.exit(1);
+  }
+};
 
 // Start server
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 console.log(`Server is running on port ${port}`);
-console.log(`Swagger documentation available at http://localhost:${port}/swagger`);
 
 serve({
   fetch: app.fetch,
   port: Number(port),
 });
 
-export default app; 
+export default {
+  port,
+  runMigrations,
+}; 
