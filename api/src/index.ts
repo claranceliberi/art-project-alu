@@ -8,6 +8,7 @@ import { swaggerConfig } from './swagger';
 import dotenv from 'dotenv';
 import { authRoutes } from './routes/auth';
 import { artworkRoutes } from './routes/artworks';
+import { artistRoutes } from './routes/artists';
 
 // Load environment variables
 dotenv.config();
@@ -43,11 +44,10 @@ app.route('/api/users', userRoutes);
 app.route('/api/categories', categoryRoutes);
 app.route('/api/transactions', transactionRoutes);
 app.route('/api/artists', artistRoutes);
-app.route('/api/checkout', checkoutRoutes);
 app.route('/api/artworks', artworkRoutes);
 
 // Start server
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 console.log(`Server is running on port ${port}`);
 console.log(`Swagger documentation available at http://localhost:${port}/swagger`);
 

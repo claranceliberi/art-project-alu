@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '@/lib/api-client';
-import { API_ENDPOINTS } from '@/config/api';
+import { api } from '../lib/api-client';
+import { API_ENDPOINTS } from '../config/api';
 
 export interface User {
   id: string;

@@ -4,6 +4,7 @@ import { db } from '../db';
 import { artworks } from '../db/schema';
 import { eq, and, gte, lte, sql } from 'drizzle-orm';
 import { authenticateToken, requireArtist } from '../middleware/auth';
+import { uploadImage } from '../utils/upload';
 
 type Env = {
   user: {
@@ -18,7 +19,6 @@ const createArtworkSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
   price: z.number().positive(),
-  imageUrl: z.string().url(),
   categoryId: z.string().uuid(),
   quantity: z.number().int().positive().default(1),
 });
@@ -26,21 +26,40 @@ const createArtworkSchema = z.object({
 // Create artwork (artist only)
 router.post('/', authenticateToken, requireArtist, async (c) => {
   try {
-    const artworkData = createArtworkSchema.parse(await c.req.json());
+    const formData = await c.req.formData();
     const user = c.get('user');
 
+    // Extract form data
+    const title = formData.get('title') as string;
+    const description = formData.get('description') as string;
+    const price = Number(formData.get('price'));
+    const categoryId = formData.get('categoryId') as string;
+    const image = formData.get('image') as File;
+
+    if (!title || !price || !categoryId || !image) {
+      return c.json({ error: 'Missing required fields' }, 400);
+    }
+
+    // Upload image to Cloudinary
+    const imageUrl = await uploadImage(image);
+
+    // Create artwork with the Cloudinary URL
     const [artwork] = await db
       .insert(artworks)
       .values({
-        ...artworkData,
-        price: artworkData.price.toString(),
-        quantity: artworkData.quantity.toString(),
+        title,
+        description: description || '',
+        price: price.toString(),
+        imageUrl,
+        categoryId,
         artistId: user.userId,
+        quantity: '1',
       })
       .returning();
 
     return c.json(artwork, 201);
   } catch (error) {
+    console.error('Error creating artwork:', error);
     if (error instanceof z.ZodError) {
       return c.json({ error: error.errors }, 400);
     }

@@ -1,14 +1,16 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../../components/ui/card';
 import { Label } from '../../components/ui/label';
-import { RadioGroup, RadioGroupItem } from '../../components/ui/radio-group';
 import { useToast } from '../../components/ui/use-toast';
+import { Eye, EyeOff } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from '../../components/ui/radio-group';
 
 export function SignUp() {
+  const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,6 +18,7 @@ export function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
   const { signup } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +47,7 @@ export function SignUp() {
         <CardHeader>
           <CardTitle>Sign Up</CardTitle>
           <CardDescription>
-            Create a new account to get started
+            Create an account to start exploring and sharing art
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -54,11 +57,11 @@ export function SignUp() {
                 <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
-                  type="text"
                   placeholder="Enter your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
+                  disabled={isLoading}
                 />
               </div>
               <div className="flex flex-col space-y-1.5">
@@ -70,29 +73,41 @@ export function SignUp() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled={isLoading}
                 />
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Create a password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    disabled={isLoading}
+                    className="pr-10"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label>Role</Label>
+                <Label>Account Type</Label>
                 <RadioGroup
                   value={role}
-                  onValueChange={(value: 'user' | 'artist') => setRole(value)}
-                  className="flex flex-col space-y-1"
+                  onValueChange={(value) => setRole(value as 'user' | 'artist')}
+                  className="flex gap-4"
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="user" id="user" />
-                    <Label htmlFor="user">User</Label>
+                    <Label htmlFor="user">Collector</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="artist" id="artist" />
@@ -108,7 +123,7 @@ export function SignUp() {
             </Button>
             <div className="text-sm text-center">
               Already have an account?{' '}
-              <Link to="/auth/signin" className="text-primary hover:underline">
+              <Link to="/signin" className="text-primary hover:underline">
                 Sign in
               </Link>
             </div>
