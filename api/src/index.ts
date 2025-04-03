@@ -4,8 +4,10 @@ import { logger } from 'hono/logger';
 import { prettyJSON } from 'hono/pretty-json';
 import { serve } from '@hono/node-server';
 import { config } from 'dotenv';
-import { migrate } from 'drizzle-orm/bun-sqlite/migrator';
-import { db } from './db';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import { migrate } from 'drizzle-orm/postgres-js/migrator';
+import postgres from 'postgres';
+import * as schema from './db/schema';
 import { artworks } from './db/schema';
 import { artworkRoutes } from './routes/artworks';
 import { authRoutes } from './routes/auth';
@@ -24,6 +26,9 @@ const app = new Hono();
 app.use('*', logger());
 app.use('*', cors());
 app.use('*', prettyJSON());
+
+const client = postgres(process.env.DATABASE_URL!);
+const db = drizzle(client, { schema });
 
 // Routes
 app.route('/api/artworks', artworkRoutes);

@@ -82,18 +82,14 @@ app.post('/', authenticateToken, async (c) => {
         }
 
         // Create transaction
-        const [transaction] = await db
-          .insert(transactions)
-          .values({
-            amount: (item.price * item.quantity).toString(),
-            status: 'pending',
-            buyerId: validatedData.buyerId,
-            artworkId: item.artworkId,
-            shippingAddress: validatedData.shippingAddress,
-            transactionDate: new Date(),
-            invoiceNumber: paymentRequest.invoiceNumber,
-          })
-          .returning();
+        const transaction = await db.insert(transactions).values({
+          amount: totalAmount.toString(),
+          status: 'pending',
+          buyerId: validatedData.buyerId,
+          artworkId: item.artworkId,
+          shippingAddress: validatedData.shippingAddress,
+          transactionDate: new Date(),
+        }).returning();
 
         return transaction;
       })

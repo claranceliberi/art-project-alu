@@ -15,12 +15,12 @@ type Env = {
 
 const router = new Hono<{ Bindings: Env }>();
 
-const createArtworkSchema = z.object({
+const artworkSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
-  price: z.number().positive(),
-  categoryId: z.string().uuid(),
-  quantity: z.number().int().positive().default(1),
+  price: z.string().min(1),
+  imageUrl: z.string().min(1),
+  categoryId: z.string().uuid().optional(),
 });
 
 // Create artwork (artist only)
@@ -44,7 +44,7 @@ router.post('/', authenticateToken, requireArtist, async (c) => {
     const imageUrl = await uploadImage(image);
 
     // Create artwork with the Cloudinary URL
-    const [artwork] = await db
+    const newArtwork = await db
       .insert(artworks)
       .values({
         title,
@@ -53,11 +53,10 @@ router.post('/', authenticateToken, requireArtist, async (c) => {
         imageUrl,
         categoryId,
         artistId: user.userId,
-        quantity: '1',
       })
       .returning();
 
-    return c.json(artwork, 201);
+    return c.json(newArtwork, 201);
   } catch (error) {
     console.error('Error creating artwork:', error);
     if (error instanceof z.ZodError) {
@@ -150,29 +149,30 @@ router.get('/my-artworks', authenticateToken, requireArtist, async (c) => {
 router.patch('/:id', authenticateToken, requireArtist, async (c) => {
   try {
     const id = c.req.param('id');
-    const artworkData = createArtworkSchema.partial().parse(await c.req.json());
+    const artworkData = artworkSchema.parse(await c.req.json());
     const user = c.get('user');
 
-    const [artwork] = await db
-      .update(artworks)
+    const [updatedArtwork] = await db.update(artworks)
       .set({
-        ...artworkData,
-        price: artworkData.price?.toString(),
-        quantity: artworkData.quantity?.toString(),
+        title: artworkData.title,
+        description: artworkData.description,
+        price: artworkData.price,
+        imageUrl: artworkData.imageUrl,
+        categoryId: artworkData.categoryId,
         updatedAt: new Date(),
       })
       .where(eq(artworks.id, id))
       .returning();
 
-    if (!artwork) {
+    if (!updatedArtwork) {
       return c.json({ error: 'Artwork not found' }, 404);
     }
 
-    if (artwork.artistId !== user.userId) {
+    if (updatedArtwork.artistId !== user.userId) {
       return c.json({ error: 'Not authorized to update this artwork' }, 403);
     }
 
-    return c.json(artwork);
+    return c.json(updatedArtwork);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return c.json({ error: error.errors }, 400);

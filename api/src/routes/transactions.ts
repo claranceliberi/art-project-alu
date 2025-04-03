@@ -11,6 +11,7 @@ const createTransactionSchema = z.object({
   buyerId: z.string().uuid(),
   artworkId: z.string().uuid(),
   status: z.enum(['pending', 'completed', 'failed']).default('pending'),
+  shippingAddress: z.string().min(1),
 });
 
 const updateTransactionSchema = z.object({
@@ -106,12 +107,16 @@ router.post('/', async (c) => {
     }
 
     // Create transaction
-    const newTransaction = await db.insert(schema.transactions).values({
-      ...validatedData,
-      amount: artwork.price,
+    const transaction = await db.insert(schema.transactions).values({
+      amount: validatedData.amount.toString(),
+      status: validatedData.status,
+      buyerId: validatedData.buyerId,
+      artworkId: validatedData.artworkId,
+      shippingAddress: validatedData.shippingAddress,
+      transactionDate: new Date(),
     }).returning();
 
-    return c.json(newTransaction[0], 201);
+    return c.json(transaction[0], 201);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return c.json({ error: error.errors }, 400);
