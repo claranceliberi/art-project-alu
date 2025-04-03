@@ -16,6 +16,7 @@ export const swaggerConfig = {
       get: {
         summary: 'Get all users',
         tags: ['Users'],
+        security: [{ bearerAuth: [] }],
         responses: {
           '200': {
             description: 'List of users',
@@ -30,8 +31,8 @@ export const swaggerConfig = {
               },
             },
           },
-          '500': {
-            description: 'Server error',
+          '401': {
+            description: 'Unauthorized',
             content: {
               'application/json': {
                 schema: {
@@ -45,6 +46,7 @@ export const swaggerConfig = {
       post: {
         summary: 'Create a new user',
         tags: ['Users'],
+        security: [{ bearerAuth: [] }],
         requestBody: {
           required: true,
           content: {
@@ -68,6 +70,16 @@ export const swaggerConfig = {
           },
           '400': {
             description: 'Validation error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '401': {
+            description: 'Unauthorized',
             content: {
               'application/json': {
                 schema: {
@@ -704,6 +716,299 @@ export const swaggerConfig = {
         },
       },
     },
+    '/api/artists': {
+      get: {
+        summary: 'Get all artists',
+        tags: ['Artists'],
+        responses: {
+          '200': {
+            description: 'List of artists',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/components/schemas/Artist',
+                  },
+                },
+              },
+            },
+          },
+          '500': {
+            description: 'Server error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/api/artists/{id}': {
+      get: {
+        summary: 'Get artist by ID',
+        tags: ['Artists'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string',
+              format: 'uuid',
+            },
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'Artist details',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Artist',
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'Artist not found',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+      put: {
+        summary: 'Update artist profile',
+        tags: ['Artists'],
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string',
+              format: 'uuid',
+            },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/UpdateArtistInput',
+              },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'Artist updated successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Artist',
+                },
+              },
+            },
+          },
+          '403': {
+            description: 'Unauthorized - Can only update own profile',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'Artist not found',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/api/users/{id}': {
+      get: {
+        summary: 'Get user by ID',
+        tags: ['Users'],
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string',
+              format: 'uuid',
+            },
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'User details',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/User',
+                },
+              },
+            },
+          },
+          '401': {
+            description: 'Unauthorized',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'User not found',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        summary: 'Delete user',
+        tags: ['Users'],
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string',
+              format: 'uuid',
+            },
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'User deleted successfully',
+          },
+          '401': {
+            description: 'Unauthorized',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'User not found',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/api/checkout': {
+      post: {
+        summary: 'Process checkout for cart items',
+        tags: ['Checkout'],
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['items', 'buyerId'],
+                properties: {
+                  items: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      required: ['artworkId', 'quantity', 'price'],
+                      properties: {
+                        artworkId: { type: 'string', format: 'uuid' },
+                        quantity: { type: 'number', minimum: 1 },
+                        price: { type: 'number', minimum: 0 }
+                      }
+                    }
+                  },
+                  buyerId: { type: 'string', format: 'uuid' }
+                }
+              }
+            }
+          }
+        },
+        responses: {
+          '200': {
+            description: 'Checkout processed successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    message: { type: 'string' },
+                    transactions: {
+                      type: 'array',
+                      items: {
+                        $ref: '#/components/schemas/Transaction'
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          '400': {
+            description: 'Invalid request or artwork not available',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error'
+                }
+              }
+            }
+          },
+          '401': {
+            description: 'Unauthorized - User not logged in',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error'
+                }
+              }
+            }
+          }
+        }
+      }
+    },
   },
   components: {
     schemas: {
@@ -851,6 +1156,34 @@ export const swaggerConfig = {
           email: { type: 'string', format: 'email' },
           password: { type: 'string' },
         },
+      },
+      Artist: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', format: 'uuid' },
+          name: { type: 'string' },
+          email: { type: 'string', format: 'email' },
+          profileImageURL: { type: 'string', format: 'uri' },
+          bio: { type: 'string' },
+          role: { type: 'string', enum: ['artist'] },
+          createdAt: { type: 'string', format: 'date-time' },
+          updatedAt: { type: 'string', format: 'date-time' },
+        },
+      },
+      UpdateArtistInput: {
+        type: 'object',
+        properties: {
+          name: { type: 'string', minLength: 2 },
+          bio: { type: 'string' },
+          profileImageURL: { type: 'string', format: 'uri' },
+        },
+      },
+    },
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
       },
     },
   },

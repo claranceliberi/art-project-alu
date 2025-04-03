@@ -17,6 +17,7 @@ dotenv.config();
 import { userRoutes } from './routes/users';
 import { categoryRoutes } from './routes/categories';
 import { transactionRoutes } from './routes/transactions';
+import { checkoutRoutes } from './routes/checkout';
 
 const app = new Hono();
 
@@ -43,6 +44,7 @@ app.route('/api/auth', authRoutes);
 app.route('/api/users', userRoutes);
 app.route('/api/categories', categoryRoutes);
 app.route('/api/transactions', transactionRoutes);
+app.route('/api/checkout', checkoutRoutes);
 app.route('/api/artists', artistRoutes);
 app.route('/api/artworks', artworkRoutes);
 

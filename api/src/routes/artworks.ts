@@ -206,4 +206,27 @@ router.delete('/:id', authenticateToken, requireArtist, async (c) => {
   }
 });
 
+// Get artwork by ID (public endpoint)
+router.get('/:id', async (c) => {
+  try {
+    const id = c.req.param('id');
+    const artwork = await db.query.artworks.findFirst({
+      where: eq(artworks.id, id),
+      with: {
+        category: true,
+        artist: true,
+      },
+    });
+
+    if (!artwork) {
+      return c.json({ error: 'Artwork not found' }, 404);
+    }
+
+    return c.json(artwork);
+  } catch (error) {
+    console.error('Error fetching artwork:', error);
+    return c.json({ error: 'Failed to fetch artwork' }, 500);
+  }
+});
+
 export { router as artworkRoutes }; 

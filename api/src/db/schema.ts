@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, decimal, uuid } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, decimal, uuid, jsonb } from 'drizzle-orm/pg-core';
 import { relations, type InferModel } from 'drizzle-orm';
 
 export const users = pgTable('users', {
@@ -42,6 +42,7 @@ export const transactions = pgTable('transactions', {
   transactionDate: timestamp('transaction_date').defaultNow(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
+  shippingAddress: jsonb('shipping_address').notNull(),
 });
 
 // Types

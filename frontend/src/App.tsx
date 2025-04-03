@@ -11,6 +11,9 @@ import Explore from '@/pages/Explore'
 import Activity from '@/pages/Activity'
 import ManageArtworks from '@/pages/ManageArtworks'
 import UploadArtwork from '@/pages/UploadArtwork'
+import Profile from '@/pages/Profile'
+import Cart from '@/pages/Cart'
+import ArtworkDetails from '@/pages/ArtworkDetails'
 import { CartProvider } from '@/contexts/CartContext'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { SignIn } from '@/pages/auth/SignIn'
@@ -25,8 +28,17 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
 }
 
 function ArtistRoute({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth()
-  return user?.role === 'artist' ? <>{children}</> : <Navigate to="/signin" />
+  const { user, isLoading } = useAuth()
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (!user || user.role !== 'artist') {
+    return <Navigate to="/sign-in" replace />
+  }
+
+  return <>{children}</>
 }
 
 // Layout wrapper component that includes the Outlet
@@ -41,9 +53,9 @@ function LayoutWrapper() {
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <AuthProvider>
-          <CartProvider>
+      <CartProvider>
+        <Router>
+          <AuthProvider>
             <Routes>
               {/* Auth routes */}
               <Route path="/signin" element={<SignIn />} />
@@ -58,6 +70,18 @@ export default function App() {
                 <Route path="/activity" element={<Activity />} />
                 <Route path="/artists" element={<Artists />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/artwork/:id/:slug" element={<ArtworkDetails />} />
+                
+                {/* Protected routes */}
+                <Route
+                  path="/profile"
+                  element={
+                    <PrivateRoute>
+                      <Profile />
+                    </PrivateRoute>
+                  }
+                />
                 
                 {/* Artist routes */}
                 <Route
@@ -84,33 +108,15 @@ export default function App() {
                     </ArtistRoute>
                   }
                 />
-
-                {/* Protected routes */}
-                <Route
-                  path="/profile"
-                  element={
-                    <PrivateRoute>
-                      <div>Profile Page (TODO)</div>
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/orders"
-                  element={
-                    <PrivateRoute>
-                      <div>Orders Page (TODO)</div>
-                    </PrivateRoute>
-                  }
-                />
               </Route>
 
               {/* Catch all route */}
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
             <Toaster />
-          </CartProvider>
-        </AuthProvider>
-      </Router>
+          </AuthProvider>
+        </Router>
+      </CartProvider>
     </QueryClientProvider>
   )
 }

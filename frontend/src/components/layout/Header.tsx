@@ -1,11 +1,14 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import { useCart } from '@/contexts/CartContext'
 import { Button } from '../ui/button'
+import { ShoppingCart } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
@@ -13,6 +16,7 @@ import { User } from 'lucide-react'
 
 export function Header() {
   const { user, signout } = useAuth()
+  const { getTotalItems } = useCart()
   const navigate = useNavigate()
 
   const handleSignOut = async () => {
@@ -45,20 +49,36 @@ export function Header() {
               My Artworks
             </Link>
           )}
+          <Link to="/cart" className="relative">
+            <ShoppingCart className="h-6 w-6" />
+            {getTotalItems() > 0 && (
+              <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full w-5 h-5 text-xs flex items-center justify-center">
+                {getTotalItems()}
+              </span>
+            )}
+          </Link>
         </div>
 
         <div className="flex items-center space-x-4">
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <User className="h-5 w-5" />
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <span className="sr-only">Open user menu</span>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                    {user.name.charAt(0)}
+                  </div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem className="font-medium">
-                  {user.name}
-                </DropdownMenuItem>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{user.name}</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {user.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {user.role === 'artist' && (
                   <>
