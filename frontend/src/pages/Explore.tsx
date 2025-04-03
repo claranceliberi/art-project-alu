@@ -9,92 +9,92 @@ const categories = [
   {
     id: "1",
     name: "Painting",
-    description: "Traditional & contemporary painting",
-    imageUrl: "/src/assets/images/painting.jpg",
+    description: "Original paintings and artworks",
+    imageUrl: "/assets/images/painting.jpg",
     slug: "painting"
   },
   {
     id: "2",
     name: "Sculptures",
     description: "3D artworks and sculptures",
-    imageUrl: "/src/assets/images/sculptures.jpg",
+    imageUrl: "/assets/images/sculptures.jpg",
     slug: "sculptures"
   },
   {
     id: "3",
     name: "Performative Art",
-    description: "Live art performances",
-    imageUrl: "/src/assets/images/performative art icon.jpg",
+    description: "Live and recorded performances",
+    imageUrl: "/assets/images/performative art icon.jpg",
     slug: "performative-art"
   },
   {
     id: "4",
     name: "Digital Art",
-    description: "Digital creations and NFTs",
-    imageUrl: "/src/assets/images/digital art.jpg",
+    description: "Digital creations and designs",
+    imageUrl: "/assets/images/digital art.jpg",
     slug: "digital-art"
   },
   {
     id: "5",
     name: "Animation",
-    description: "Animated artworks",
-    imageUrl: "/src/assets/images/animated.jpg",
+    description: "Animated artworks and films",
+    imageUrl: "/assets/images/animated.jpg",
     slug: "animation"
   },
   {
     id: "6",
     name: "Fashion Design",
-    description: "Contemporary fashion",
-    imageUrl: "/src/assets/images/fashion design.jpg",
+    description: "Contemporary fashion art",
+    imageUrl: "/assets/images/fashion design.jpg",
     slug: "fashion-design"
   },
   {
     id: "7",
     name: "Web Design",
     description: "Digital web experiences",
-    imageUrl: "/src/assets/images/web design icon.jpg",
+    imageUrl: "/assets/images/web design icon.jpg",
     slug: "web-design"
   },
   {
     id: "8",
     name: "Drawing",
-    description: "Sketches and illustrations",
-    imageUrl: "/src/assets/images/drawing.jpg",
+    description: "Hand-drawn artworks",
+    imageUrl: "/assets/images/drawing.jpg",
     slug: "drawing"
   },
   {
     id: "9",
-    name: "Arts & Crafts",
-    description: "Handmade creations",
-    imageUrl: "/src/assets/images/arts and craft.jpg",
+    name: "Arts and Crafts",
+    description: "Handcrafted creations",
+    imageUrl: "/assets/images/arts and craft.jpg",
     slug: "arts-and-crafts"
   },
   {
     id: "10",
-    name: "Jewelry",
-    description: "Artistic jewelry pieces",
-    imageUrl: "/src/assets/images/download (1).jpg",
-    slug: "jewelry"
+    name: "Mixed Media",
+    description: "Multi-medium artworks",
+    imageUrl: "/assets/images/download (1).jpg",
+    slug: "mixed-media"
   },
   {
     id: "11",
     name: "Photography",
-    description: "Photographic art",
-    imageUrl: "/src/assets/images/photography.jpg",
+    description: "Fine art photography",
+    imageUrl: "/assets/images/photography.jpg",
     slug: "photography"
   },
   {
     id: "12",
     name: "Printmaking",
-    description: "Print and press art",
-    imageUrl: "/src/assets/images/printmaking icon.jpg",
+    description: "Print art and designs",
+    imageUrl: "/assets/images/printmaking icon.jpg",
     slug: "printmaking"
   },
   {
     id: "13",
     name: "Literature",
     description: "Written artistry",
-    imageUrl: "/src/assets/images/literature.jpg",
+    imageUrl: "/assets/images/literature.jpg",
     slug: "literature"
   }
 ]

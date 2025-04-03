@@ -11,9 +11,9 @@ const getCategoryData = (slug: string) => {
     collections: [
       {
         id: "1",
-        title: "Featured Collection",
-        description: "Best of the category",
-        imageUrl: "/src/assets/images/collection1.jpg",
+        title: "Spring Collection",
+        description: "Fresh and vibrant pieces",
+        imageUrl: "/assets/images/collection1.jpg",
         pieces: 12
       },
       // Add more collections as needed
@@ -21,9 +21,9 @@ const getCategoryData = (slug: string) => {
     featuredPieces: [
       {
         id: "1",
-        title: "Artwork Title",
+        title: "Abstract Harmony",
         artist: "Artist Name",
-        imageUrl: "/src/assets/images/artwork1.jpg",
+        imageUrl: "/assets/images/artwork1.jpg",
         price: "$1,200"
       },
       // Add more pieces as needed

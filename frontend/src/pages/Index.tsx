@@ -13,17 +13,17 @@ const collections = [
   {
     title: "#style #art",
     description: "Contemporary fashion and artistic expression",
-    imageUrl: "/src/assets/images/download (46).jpg"
+    imageUrl: "/assets/images/download (46).jpg"
   },
   {
     title: "Artist",
     description: "Celebrating creative visionaries",
-    imageUrl: "/src/assets/images/download (45).jpg"
+    imageUrl: "/assets/images/download (45).jpg"
   },
   {
     title: "Avenue",
     description: "Creative content and design excellence",
-    imageUrl: "/src/assets/images/e90dd457-abf3-40d6-86bc-270fda5e5fc7.jpg"
+    imageUrl: "/assets/images/e90dd457-abf3-40d6-86bc-270fda5e5fc7.jpg"
   }
 ]
 
@@ -41,7 +41,7 @@ export default function Index() {
           <div className="flex flex-col lg:flex-row gap-16 items-start bg-[#FFFFFF] min-h-[800px]">
             <div className="relative w-full lg:w-[600px] flex-shrink-0 overflow-hidden">
               <img 
-                src="/src/assets/images/download.jpg" 
+                src="/assets/images/download.jpg" 
                 alt="Collection Feature"
                 className="w-full h-[800px] object-cover scale-110 object-left rounded-lg bg-[#FFFFFF]"
               />
@@ -86,7 +86,7 @@ export default function Index() {
                 <div className="w-full lg:w-[500px] h-[500px] flex-shrink-0 bg-[#FFFFFF] rounded-lg flex items-center justify-center">
                   <div className="w-[500px] h-[500px] relative group">
                     <img 
-                      src="/src/assets/images/animated.jpg"
+                      src="/assets/images/animated.jpg"
                       alt="Animation"
                       className="w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-105"
                     />
@@ -105,7 +105,7 @@ export default function Index() {
                     id: "1",
                     name: "Digital Art",
                     description: "Explore digital creations",
-                    imageUrl: "/src/assets/images/digital art.jpg",
+                    imageUrl: "/assets/images/digital art.jpg",
                     slug: "digital-art",
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString()
@@ -118,7 +118,7 @@ export default function Index() {
                     id: "2",
                     name: "Sculptures",
                     description: "3D artworks and sculptures",
-                    imageUrl: "/src/assets/images/sculptures.jpg",
+                    imageUrl: "/assets/images/sculptures.jpg",
                     slug: "sculptures",
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString()
@@ -131,7 +131,7 @@ export default function Index() {
                     id: "3",
                     name: "Literature",
                     description: "Written artistry",
-                    imageUrl: "/src/assets/images/literature.jpg",
+                    imageUrl: "/assets/images/literature.jpg",
                     slug: "literature",
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString()
@@ -144,7 +144,7 @@ export default function Index() {
                     id: "4",
                     name: "Fashion Design",
                     description: "Contemporary fashion",
-                    imageUrl: "/src/assets/images/fashion design.jpg",
+                    imageUrl: "/assets/images/fashion design.jpg",
                     slug: "fashion-design",
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString()
@@ -171,7 +171,7 @@ export default function Index() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="relative group h-[600px] rounded-lg overflow-hidden">
               <img 
-                src="/src/assets/images/Inspiration.jpg"
+                src="/assets/images/Inspiration.jpg"
                 alt="Exhibition Event"
                 className="w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-105"
               />
@@ -186,7 +186,7 @@ export default function Index() {
             <div className="grid grid-cols-2 gap-6">
               <div className="relative group h-[290px] rounded-lg overflow-hidden">
                 <img 
-                  src="/src/assets/images/Hermes.jpg"
+                  src="/assets/images/Hermes.jpg"
                   alt="Workshop Event"
                   className="w-full h-full object-cover scale-125 transition-transform duration-700 ease-out group-hover:scale-[1.35]"
                 />
@@ -200,7 +200,7 @@ export default function Index() {
 
               <div className="relative group h-[290px] rounded-lg overflow-hidden">
                 <img 
-                  src="/src/assets/images/yes.jpg"
+                  src="/assets/images/yes.jpg"
                   alt="Community Event"
                   className="w-full h-full object-cover scale-125 transition-transform duration-700 ease-out group-hover:scale-[1.35]"
                 />
@@ -214,7 +214,7 @@ export default function Index() {
 
               <div className="relative group h-[290px] rounded-lg overflow-hidden">
                 <img 
-                  src="/src/assets/images/performative art icon.jpg"
+                  src="/assets/images/performative art icon.jpg"
                   alt="Art Talk Event"
                   className="w-full h-full object-cover scale-125 transition-transform duration-700 ease-out group-hover:scale-[1.35]"
                 />
@@ -228,7 +228,7 @@ export default function Index() {
 
               <div className="relative group h-[290px] rounded-lg overflow-hidden">
                 <img 
-                  src="/src/assets/images/printmaking icon.jpg"
+                  src="/assets/images/printmaking icon.jpg"
                   alt="Gallery Opening"
                   className="w-full h-full object-cover scale-125 transition-transform duration-700 ease-out group-hover:scale-[1.35]"
                 />

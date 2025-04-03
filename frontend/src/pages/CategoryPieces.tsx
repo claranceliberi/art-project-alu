@@ -102,13 +102,13 @@ export default function CategoryPieces() {
     title: "PAINTING",
     description: "Discover the timeless beauty of painting, where artists transform blank canvases into windows of emotion and storytelling. From classical masterpieces to contemporary expressions, explore how this fundamental art form continues to captivate and inspire across generations.",
     collection: {
-      imageUrl: "/src/assets/images/download (22).jpg",
+      imageUrl: "/assets/images/download (22).jpg",
       name: "Renaissance Masters",
       description: "A curated collection of 15th-century Italian paintings",
       pieceCount: 24
     },
     piece: {
-      imageUrl: "/src/assets/images/cloth piece.jpg",
+      imageUrl: "/assets/images/cloth piece.jpg",
       name: "Summer Garden",
       artist: "Maria Gonzalez",
       price: "$2,800"

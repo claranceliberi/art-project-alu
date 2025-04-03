@@ -3,6 +3,7 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { prettyJSON } from 'hono/pretty-json';
 import { serve } from '@hono/node-server';
+import { swaggerUI } from '@hono/swagger-ui';
 import { config } from 'dotenv';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
@@ -16,6 +17,7 @@ import { transactionRoutes } from './routes/transactions';
 import { categoryRoutes } from './routes/categories';
 import { artistRoutes } from './routes/artists';
 import { userRoutes } from './routes/users';
+import { swaggerConfig } from './swagger';
 
 // Load environment variables
 config();
@@ -29,6 +31,10 @@ app.use('*', prettyJSON());
 
 const client = postgres(process.env.DATABASE_URL!);
 const db = drizzle(client, { schema });
+
+// Swagger UI
+app.get('/swagger', swaggerUI({ url: '/api-docs' }));
+app.get('/api-docs', (c) => c.json(swaggerConfig));
 
 // Routes
 app.route('/api/artworks', artworkRoutes);
@@ -55,14 +61,19 @@ const runMigrations = async () => {
 
 // Start server
 const port = process.env.PORT || 3000;
+
+if (process.env.NODE_ENV === 'production') {
+  serve({
+    fetch: app.fetch,
+    port: Number(port),
+    hostname: '0.0.0.0'
+  });
+} else {
+  serve({
+    fetch: app.fetch,
+    port: Number(port)
+  });
+}
+
 console.log(`Server is running on port ${port}`);
-
-serve({
-  fetch: app.fetch,
-  port: Number(port),
-});
-
-export default {
-  port,
-  runMigrations,
-}; 
+console.log(`Swagger documentation available at http://localhost:${port}/swagger`); 

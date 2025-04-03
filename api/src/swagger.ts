@@ -638,76 +638,118 @@ export const swaggerConfig = {
     },
     '/api/auth/signup': {
       post: {
-        summary: 'Create a new user account',
-        tags: ['Authentication'],
+        tags: ['Auth'],
+        summary: 'Register a new user',
         requestBody: {
           required: true,
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/SignupInput',
-              },
-            },
-          },
+                type: 'object',
+                required: ['name', 'email', 'password'],
+                properties: {
+                  name: {
+                    type: 'string',
+                    description: 'User name',
+                    example: 'John Doe'
+                  },
+                  email: {
+                    type: 'string',
+                    format: 'email',
+                    description: 'User email',
+                    example: 'john@example.com'
+                  },
+                  password: {
+                    type: 'string',
+                    description: 'User password',
+                    example: 'password123'
+                  },
+                  role: {
+                    type: 'string',
+                    enum: ['user', 'artist'],
+                    default: 'user',
+                    description: 'User role'
+                  }
+                }
+              }
+            }
+          }
         },
         responses: {
-          '201': {
-            description: 'User created successfully',
+          201: {
+            description: 'User registered successfully',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
                   properties: {
                     user: {
-                      $ref: '#/components/schemas/User',
+                      type: 'object',
+                      properties: {
+                        id: {
+                          type: 'string',
+                          format: 'uuid'
+                        },
+                        name: {
+                          type: 'string'
+                        },
+                        email: {
+                          type: 'string',
+                          format: 'email'
+                        },
+                        role: {
+                          type: 'string',
+                          enum: ['user', 'artist']
+                        }
+                      }
                     },
                     token: {
-                      type: 'string',
-                    },
-                  },
-                },
-              },
-            },
+                      type: 'string'
+                    }
+                  }
+                }
+              }
+            }
           },
-          '400': {
-            description: 'Validation error or user already exists',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/Error',
-                },
-              },
-            },
+          400: {
+            description: 'Invalid request body or user already exists'
           },
-          '500': {
-            description: 'Server error',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/Error',
-                },
-              },
-            },
-          },
-        },
-      },
+          500: {
+            description: 'Internal server error'
+          }
+        }
+      }
     },
     '/api/auth/signin': {
       post: {
-        summary: 'Sign in to an existing account',
-        tags: ['Authentication'],
+        tags: ['Auth'],
+        summary: 'Sign in a user',
         requestBody: {
           required: true,
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/SigninInput',
-              },
-            },
-          },
+                type: 'object',
+                required: ['email', 'password'],
+                properties: {
+                  email: {
+                    type: 'string',
+                    format: 'email',
+                    description: 'User email',
+                    example: 'john@example.com'
+                  },
+                  password: {
+                    type: 'string',
+                    description: 'User password',
+                    example: 'password123'
+                  }
+                }
+              }
+            }
+          }
         },
         responses: {
-          '200': {
+          200: {
             description: 'User signed in successfully',
             content: {
               'application/json': {
@@ -715,38 +757,41 @@ export const swaggerConfig = {
                   type: 'object',
                   properties: {
                     user: {
-                      $ref: '#/components/schemas/User',
+                      type: 'object',
+                      properties: {
+                        id: {
+                          type: 'string',
+                          format: 'uuid'
+                        },
+                        name: {
+                          type: 'string'
+                        },
+                        email: {
+                          type: 'string',
+                          format: 'email'
+                        },
+                        role: {
+                          type: 'string',
+                          enum: ['user', 'artist']
+                        }
+                      }
                     },
                     token: {
-                      type: 'string',
-                    },
-                  },
-                },
-              },
-            },
+                      type: 'string'
+                    }
+                  }
+                }
+              }
+            }
           },
-          '401': {
-            description: 'Invalid credentials',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/Error',
-                },
-              },
-            },
+          401: {
+            description: 'Invalid credentials'
           },
-          '500': {
-            description: 'Server error',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/Error',
-                },
-              },
-            },
-          },
-        },
-      },
+          500: {
+            description: 'Internal server error'
+          }
+        }
+      }
     },
     '/api/artists': {
       get: {

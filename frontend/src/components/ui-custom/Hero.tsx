@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import heroImage from '@/assets/images/download (29).jpg'
 
 interface HeroProps {
   className?: string
@@ -20,7 +19,7 @@ export function Hero({
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full">
         <img 
-          src={heroImage}
+          src="/assets/images/download (29).jpg"
           alt="Background"
           className="w-full h-full object-cover object-center"
         />
@@ -46,7 +45,7 @@ export function Hero({
           <div className="relative w-full max-w-[600px] mx-auto lg:mx-0 lg:ml-auto lg:-mr-12 h-[100vh] lg:h-[120vh]">
             <div className="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-l-2xl lg:rounded-r-none shadow-2xl" />
             <img 
-              src={heroImage}
+              src="/assets/images/download (29).jpg"
               alt="Featured Artwork"
               className="absolute inset-0 w-full h-full object-cover object-[center_30%] rounded-l-2xl lg:rounded-r-none"
             />
