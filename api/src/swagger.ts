@@ -10,6 +10,10 @@ export const swaggerConfig = {
       url: 'http://localhost:3000',
       description: 'Development server',
     },
+    {
+      url: 'https://art-project-alu.fly.dev',
+      description: 'Production server',
+    },
   ],
   paths: {
     '/api/users': {
@@ -299,12 +303,19 @@ export const swaggerConfig = {
       post: {
         summary: 'Create a new category',
         tags: ['Categories'],
+        security: [{ bearerAuth: [] }],
         requestBody: {
           required: true,
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/CreateCategoryInput',
+                type: 'object',
+                required: ['name'],
+                properties: {
+                  name: {
+                    type: 'string',
+                  },
+                },
               },
             },
           },
@@ -316,6 +327,16 @@ export const swaggerConfig = {
               'application/json': {
                 schema: {
                   $ref: '#/components/schemas/Category',
+                },
+              },
+            },
+          },
+          '401': {
+            description: 'Unauthorized',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
                 },
               },
             },
@@ -423,6 +444,7 @@ export const swaggerConfig = {
       get: {
         summary: 'Get all transactions',
         tags: ['Transactions'],
+        security: [{ bearerAuth: [] }],
         responses: {
           '200': {
             description: 'List of transactions',
@@ -433,6 +455,16 @@ export const swaggerConfig = {
                   items: {
                     $ref: '#/components/schemas/Transaction',
                   },
+                },
+              },
+            },
+          },
+          '401': {
+            description: 'Unauthorized',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
                 },
               },
             },
@@ -937,7 +969,7 @@ export const swaggerConfig = {
     },
     '/api/checkout': {
       post: {
-        summary: 'Process checkout for cart items',
+        summary: 'Process checkout and create payment request',
         tags: ['Checkout'],
         security: [{ bearerAuth: [] }],
         requestBody: {
@@ -946,25 +978,61 @@ export const swaggerConfig = {
             'application/json': {
               schema: {
                 type: 'object',
-                required: ['items', 'buyerId'],
+                required: ['buyerId', 'items', 'shippingAddress'],
                 properties: {
+                  buyerId: {
+                    type: 'string',
+                    format: 'uuid',
+                  },
                   items: {
                     type: 'array',
                     items: {
                       type: 'object',
                       required: ['artworkId', 'quantity', 'price'],
                       properties: {
-                        artworkId: { type: 'string', format: 'uuid' },
-                        quantity: { type: 'number', minimum: 1 },
-                        price: { type: 'number', minimum: 0 }
-                      }
-                    }
+                        artworkId: {
+                          type: 'string',
+                          format: 'uuid',
+                        },
+                        quantity: {
+                          type: 'number',
+                          minimum: 1,
+                        },
+                        price: {
+                          type: 'number',
+                          minimum: 0,
+                        },
+                      },
+                    },
                   },
-                  buyerId: { type: 'string', format: 'uuid' }
-                }
-              }
-            }
-          }
+                  shippingAddress: {
+                    type: 'object',
+                    required: ['fullName', 'streetAddress', 'city', 'state', 'zipCode', 'country'],
+                    properties: {
+                      fullName: {
+                        type: 'string',
+                      },
+                      streetAddress: {
+                        type: 'string',
+                      },
+                      city: {
+                        type: 'string',
+                      },
+                      state: {
+                        type: 'string',
+                      },
+                      zipCode: {
+                        type: 'string',
+                      },
+                      country: {
+                        type: 'string',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
         responses: {
           '200': {
@@ -974,40 +1042,50 @@ export const swaggerConfig = {
                 schema: {
                   type: 'object',
                   properties: {
-                    message: { type: 'string' },
-                    transactions: {
-                      type: 'array',
-                      items: {
-                        $ref: '#/components/schemas/Transaction'
-                      }
-                    }
-                  }
-                }
-              }
-            }
+                    success: {
+                      type: 'boolean',
+                    },
+                    data: {
+                      type: 'object',
+                      properties: {
+                        transactions: {
+                          type: 'array',
+                          items: {
+                            $ref: '#/components/schemas/Transaction',
+                          },
+                        },
+                        checkoutUrl: {
+                          type: 'string',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
           '400': {
-            description: 'Invalid request or artwork not available',
+            description: 'Validation error',
             content: {
               'application/json': {
                 schema: {
-                  $ref: '#/components/schemas/Error'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
           },
           '401': {
-            description: 'Unauthorized - User not logged in',
+            description: 'Unauthorized',
             content: {
               'application/json': {
                 schema: {
-                  $ref: '#/components/schemas/Error'
-                }
-              }
-            }
-          }
-        }
-      }
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
     },
   },
   components: {
