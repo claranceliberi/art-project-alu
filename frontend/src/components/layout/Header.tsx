@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
-import { User } from 'lucide-react'
+import { Avatar, AvatarFallback } from '../ui/avatar'
 
 export function Header() {
   const { user, signout } = useAuth()
@@ -63,11 +63,12 @@ export function Header() {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <span className="sr-only">Open user menu</span>
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                    {user.name.charAt(0)}
-                  </div>
+                <Button variant="ghost" className="relative p-0 h-8 w-8 rounded-full hover:bg-transparent">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-primary text-primary-foreground">
+                      {user.name.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>

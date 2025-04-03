@@ -19,6 +19,7 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import { SignIn } from '@/pages/auth/SignIn'
 import { SignUp } from '@/pages/auth/SignUp'
 import { useAuth } from '@/contexts/AuthContext'
+import CategoryPieces from './pages/CategoryPieces'
 
 const queryClient = new QueryClient()
 
@@ -72,6 +73,9 @@ export default function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/artwork/:id/:slug" element={<ArtworkDetails />} />
+
+              <Route path="/categories/pieces" element={<CategoryPieces />} />
+               <Route path="/categories/pieces/:slug" element={<CategoryPieces />} />
                 
                 {/* Protected routes */}
                 <Route
