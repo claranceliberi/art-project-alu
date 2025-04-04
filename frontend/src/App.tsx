@@ -20,6 +20,8 @@ import { SignIn } from '@/pages/auth/SignIn'
 import { SignUp } from '@/pages/auth/SignUp'
 import { useAuth } from '@/contexts/AuthContext'
 import CategoryPieces from './pages/CategoryPieces'
+import CollectionPage from '@/pages/CollectionPage'
+import EventPage from '@/pages/EventPage'
 
 const queryClient = new QueryClient()
 
@@ -68,14 +70,23 @@ export default function App() {
                 <Route path="/" element={<Index />} />
                 <Route path="/browse" element={<Browse />} />
                 <Route path="/explore" element={<Explore />} />
-                <Route path="/activity" element={<Activity />} />
+                <Route
+                  path="/activity"
+                  element={
+                    <PrivateRoute>
+                      <Activity />
+                    </PrivateRoute>
+                  }
+                />
                 <Route path="/artists" element={<Artists />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/artwork/:id/:slug" element={<ArtworkDetails />} />
 
-              <Route path="/categories/pieces" element={<CategoryPieces />} />
-               <Route path="/categories/pieces/:slug" element={<CategoryPieces />} />
+                <Route path="/categories/pieces" element={<CategoryPieces />} />
+                <Route path="/categories/pieces/:slug" element={<CategoryPieces />} />
+                <Route path="/collections/:categorySlug/:collectionId" element={<CollectionPage />} />
+                <Route path="/events/:eventId" element={<EventPage />} />
                 
                 {/* Protected routes */}
                 <Route

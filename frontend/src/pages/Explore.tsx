@@ -2,14 +2,15 @@ import { Section } from '@/components/ui-custom/Section'
 import { Input } from '@/components/ui/input'
 import { Search } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 
 const categories = [
   {
     id: "1",
-    name: "Painting",
+    name: "Paintings",
     description: "Traditional & contemporary painting",
     imageUrl: "/src/assets/images/painting.jpg",
-    slug: "painting"
+    slug: "paintings"
   },
   {
     id: "2",
@@ -98,6 +99,13 @@ const categories = [
 ]
 
 export default function Explore() {
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const filteredCategories = categories.filter(category => 
+    category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    category.description.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   return (
     <div className="page-transition">
       <Section 
@@ -112,15 +120,17 @@ export default function Explore() {
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <Input 
               type="search"
-              placeholder="Search for art categories, collections, pieces, or artists..."
+              placeholder="Search for art categories..."
               className="w-full pl-12 pr-4 py-6 text-lg rounded-full border-2 border-gray-200 focus:border-black transition-colors"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
         </div>
 
         {/* Categories Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
-          {categories.map((category) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredCategories.map((category) => (
             <Link 
               key={category.id}
               to={`/categories/pieces/${category.slug}`}
@@ -138,6 +148,12 @@ export default function Explore() {
             </Link>
           ))}
         </div>
+
+        {filteredCategories.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-xl text-muted-foreground">No categories found matching your search.</p>
+          </div>
+        )}
       </Section>
     </div>
   )
