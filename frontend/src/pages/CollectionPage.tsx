@@ -13,7 +13,7 @@ const PLACEHOLDER_PIECES = {
       title: "ACTIVEGLOW",
       artist: "Elena Moonlight",
       price: 120,
-      image: "/assets/images/ACTIVEGLOW.jpg",
+      image: "/assets/images/download (31).jpg",
       description: "Abstract blue waves with textured impasto technique"
     },
     {
@@ -21,7 +21,7 @@ const PLACEHOLDER_PIECES = {
       title: "Blue Nude",
       artist: "Katrina Case",
       price: 95,
-      image: "/assets/images/Blue-Nude-2020.jpg",
+      image: "/assets/images/download (32).jpg",
       description: "Oil painting, 2020"
     },
     {
@@ -29,7 +29,7 @@ const PLACEHOLDER_PIECES = {
       title: "Humpback Whale",
       artist: "Elena Moonlight",
       price: 145,
-      image: "/assets/images/Humpback-Whale-Oil-Painting.jpg",
+      image: "/assets/images/download (33).jpg",
       description: "Original oil painting with impasto technique, 6'' x 6''"
     },
     {
@@ -37,7 +37,7 @@ const PLACEHOLDER_PIECES = {
       title: "Blue Waves",
       artist: "Jérôme Karsenti",
       price: 110,
-      image: "/assets/images/Jerome-Karsenti.jpg",
+      image: "/assets/images/download (34).jpg",
       description: "Contemporary blue abstract waves"
     },
     {
@@ -45,7 +45,7 @@ const PLACEHOLDER_PIECES = {
       title: "Venice Seascape",
       artist: "Kind of Cyan",
       price: 130,
-      image: "/assets/images/Venice-Seascape-Triptych.jpg",
+      image: "/assets/images/download (35).jpg",
       description: "Blue Lido Island Reflections, Contemporary Cyanotype"
     }
   ],
@@ -120,7 +120,7 @@ export default function CollectionPage() {
 
   // Find the category
   const category = categories.find(cat => cat.slug === categorySlug);
-
+  
   // Get collection details based on the category
   const getCollectionDetails = () => {
     if (categorySlug === 'paintings') {
@@ -201,6 +201,12 @@ export default function CollectionPage() {
                       src={piece.image}
                       alt={piece.title}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null; // Prevent infinite loop
+                        console.error(`Failed to load image: ${piece.image}`);
+                        target.src = '/assets/images/noturne.jpg'; // Fallback image
+                      }}
                     />
                   </div>
                 </CardHeader>
