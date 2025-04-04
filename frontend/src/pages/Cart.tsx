@@ -104,107 +104,155 @@ export default function Cart() {
 
   if (state.items.length === 0) {
     return (
-      <div className="container py-8">
-        <div className="max-w-2xl mx-auto text-center">
-          <h1 className="text-4xl font-bold mb-4">Your Cart is Empty</h1>
-          <p className="text-muted-foreground mb-8">
-            Add some artworks to your cart to see them here.
-          </p>
-          <Button onClick={() => navigate('/')}>Continue Shopping</Button>
+      <Layout>
+        <div className="container py-8">
+          <div className="max-w-2xl mx-auto text-center">
+            <h1 className="text-4xl font-bold mb-4">Your Cart is Empty</h1>
+            <p className="text-muted-foreground mb-8">
+              Add some artworks to your cart to see them here.
+            </p>
+            <Button onClick={() => navigate('/')}>Continue Shopping</Button>
+          </div>
         </div>
-      </div>
+      </Layout>
     )
   }
 
   return (
-    <div className="container py-8">
-      <h1 className="text-4xl font-bold mb-8">Shopping Cart</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-2 space-y-4">
-          {state.items.map((item) => (
-            <Card key={item.artwork.id}>
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={item.artwork.imageUrl}
-                    alt={item.artwork.title}
-                    className="w-24 h-24 object-cover rounded"
-                  />
-                  <div className="flex-1">
-                    <h3 className="font-semibold">{item.artwork.title}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      by {item.artwork.artistName}
-                    </p>
-                    <div className="flex items-center space-x-4 mt-2">
-                      <div className="flex items-center space-x-2">
+      <div className="container py-8">
+        <h1 className="text-4xl font-bold mb-8">Shopping Cart</h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="md:col-span-2 space-y-4">
+            {state.items.map((item) => (
+              <Card key={item.artwork.id}>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={item.artwork.imageUrl}
+                      alt={item.artwork.title}
+                      className="w-24 h-24 object-cover rounded"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-semibold">{item.artwork.title}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        by {item.artwork.artistName}
+                      </p>
+                      <div className="flex items-center space-x-4 mt-2">
+                        <div className="flex items-center space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleQuantityChange(item.artwork.id, item.quantity - 1)}
+                          >
+                            -
+                          </Button>
+                          <span className="w-8 text-center">{item.quantity}</span>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleQuantityChange(item.artwork.id, item.quantity + 1)}
+                          >
+                            +
+                          </Button>
+                        </div>
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="sm"
-                          onClick={() => handleQuantityChange(item.artwork.id, item.quantity - 1)}
+                          onClick={() => {
+                            removeFromCart(item.artwork.id)
+                            toast.success('Item removed from cart')
+                          }}
                         >
-                          -
-                        </Button>
-                        <span className="w-8 text-center">{item.quantity}</span>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleQuantityChange(item.artwork.id, item.quantity + 1)}
-                        >
-                          +
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          removeFromCart(item.artwork.id)
-                          toast.success('Item removed from cart')
-                        }}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <p className="mt-2 font-semibold">
+                        ${Number(item.artwork.price).toFixed(2)}
+                      </p>
                     </div>
-                    <p className="mt-2 font-semibold">
-                      ${Number(item.artwork.price).toFixed(2)}
-                    </p>
                   </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Shipping Address</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Input
+                  name="fullName"
+                  placeholder="Full Name"
+                  value={shippingAddress.fullName}
+                  onChange={handleAddressChange}
+                />
+                <Input
+                  name="streetAddress"
+                  placeholder="Street Address"
+                  value={shippingAddress.streetAddress}
+                  onChange={handleAddressChange}
+                />
+                <Input
+                  name="city"
+                  placeholder="City"
+                  value={shippingAddress.city}
+                  onChange={handleAddressChange}
+                />
+                <Input
+                  name="state"
+                  placeholder="State"
+                  value={shippingAddress.state}
+                  onChange={handleAddressChange}
+                />
+                <Input
+                  name="zipCode"
+                  placeholder="ZIP Code"
+                  value={shippingAddress.zipCode}
+                  onChange={handleAddressChange}
+                />
+                <Input
+                  name="country"
+                  placeholder="Country"
+                  value={shippingAddress.country}
+                  onChange={handleAddressChange}
+                />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Order Summary</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex justify-between">
+                    <span>Subtotal</span>
+                    <span>${Number(getTotalPrice()).toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Shipping</span>
+                    <span>Free</span>
+                  </div>
+                  <div className="border-t pt-4">
+                    <div className="flex justify-between font-semibold">
+                      <span>Total</span>
+                      <span>${Number(getTotalPrice()).toFixed(2)}</span>
+                    </div>
+                  </div>
+                  <Button 
+                    className="w-full" 
+                    onClick={handleCheckout}
+                    disabled={checkoutMutation.isPending || !isAddressValid()}
+                  >
+                    {checkoutMutation.isPending ? 'Processing...' : 'Proceed to Checkout'}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
-          ))}
+          </div>
         </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Order Summary</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <span>Subtotal</span>
-                <span>${Number(getTotalPrice()).toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Shipping</span>
-                <span>Free</span>
-              </div>
-              <div className="border-t pt-4">
-                <div className="flex justify-between font-semibold">
-                  <span>Total</span>
-                  <span>${Number(getTotalPrice()).toFixed(2)}</span>
-                </div>
-              </div>
-              <Button 
-                className="w-full" 
-                onClick={handleCheckout}
-                disabled={checkoutMutation.isPending || !isAddressValid()}
-              >
-                {checkoutMutation.isPending ? 'Processing...' : 'Proceed to Checkout'}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
       </div>
-    </div>
   )
 } 
