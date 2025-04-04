@@ -417,3 +417,142 @@ export const featuredArtists: Artist[] = [
     followers: 1420
   }
 ]
+
+export const collections = [
+  {
+    id: 'nocturne',
+    name: 'Nocturne',
+    description: 'A collection of blue-toned pieces capturing the essence of night and water',
+    image: '/assets/images/ACTIVEGLOW.jpg',
+    categoryId: 'paintings',
+    categoryName: 'Paintings',
+    pieces: [
+      {
+        id: 'n1',
+        title: "ACTIVEGLOW",
+        description: "Abstract blue waves with textured impasto technique",
+        imageUrl: "/assets/images/ACTIVEGLOW.jpg",
+        thumbnailUrl: "/assets/images/ACTIVEGLOW.jpg",
+        artistId: "em1",
+        artistName: "Elena Moonlight",
+        price: 120,
+        medium: "Oil on canvas",
+        dimensions: {
+          width: 24,
+          height: 36,
+          unit: "in"
+        },
+        categoryId: "paintings",
+        categoryName: "Paintings",
+        year: 2024,
+        isSold: false,
+        isFeatured: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        collectionId: "nocturne",
+        collectionName: "Nocturne"
+      },
+      {
+        id: 'n2',
+        title: "Blue Nude",
+        description: "Oil painting, 2020",
+        imageUrl: "/assets/images/Blue-Nude-2020.jpg",
+        thumbnailUrl: "/assets/images/Blue-Nude-2020.jpg",
+        artistId: "kc1",
+        artistName: "Katrina Case",
+        price: 95,
+        medium: "Oil on canvas",
+        dimensions: {
+          width: 20,
+          height: 24,
+          unit: "in"
+        },
+        categoryId: "paintings",
+        categoryName: "Paintings",
+        year: 2020,
+        isSold: false,
+        isFeatured: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        collectionId: "nocturne",
+        collectionName: "Nocturne"
+      },
+      {
+        id: 'n3',
+        title: "Bluey Moon",
+        description: "Serene moonlit landscape with reflections",
+        imageUrl: "/assets/images/Bluey-Moon.jpg",
+        thumbnailUrl: "/assets/images/Bluey-Moon.jpg",
+        artistId: "em1",
+        artistName: "Elena Moonlight",
+        price: 145,
+        medium: "Oil on canvas",
+        dimensions: {
+          width: 24,
+          height: 24,
+          unit: "in"
+        },
+        categoryId: "paintings",
+        categoryName: "Paintings",
+        year: 2024,
+        isSold: false,
+        isFeatured: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        collectionId: "nocturne",
+        collectionName: "Nocturne"
+      },
+      {
+        id: 'n4',
+        title: "Humpback Whale",
+        description: "Impasto oil painting of a majestic humpback whale",
+        imageUrl: "/assets/images/Humpback-Whale-Oil-Painting.jpg",
+        thumbnailUrl: "/assets/images/Humpback-Whale-Oil-Painting.jpg",
+        artistId: "ma1",
+        artistName: "Marine Arts",
+        price: 110,
+        medium: "Oil on canvas",
+        dimensions: {
+          width: 6,
+          height: 6,
+          unit: "in"
+        },
+        categoryId: "paintings",
+        categoryName: "Paintings",
+        year: 2024,
+        isSold: false,
+        isFeatured: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        collectionId: "nocturne",
+        collectionName: "Nocturne"
+      },
+      {
+        id: 'n5',
+        title: "Blue Waves",
+        description: "Abstract blue waves in motion",
+        imageUrl: "/assets/images/Jerome-Karsenti.jpg",
+        thumbnailUrl: "/assets/images/Jerome-Karsenti.jpg",
+        artistId: "jk1",
+        artistName: "Jérôme Karsenti",
+        price: 130,
+        medium: "Oil on canvas",
+        dimensions: {
+          width: 30,
+          height: 40,
+          unit: "in"
+        },
+        categoryId: "paintings",
+        categoryName: "Paintings",
+        year: 2024,
+        isSold: false,
+        isFeatured: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        collectionId: "nocturne",
+        collectionName: "Nocturne"
+      }
+    ]
+  },
+  // ... rest of the collections ...
+];
