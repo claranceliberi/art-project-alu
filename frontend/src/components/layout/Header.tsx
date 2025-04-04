@@ -14,6 +14,13 @@ import {
 } from '../ui/dropdown-menu'
 import { Avatar, AvatarFallback } from '../ui/avatar'
 
+const navigation = [
+  { name: 'Home', href: '/' },
+  { name: 'Browse', href: '/browse' },
+  { name: 'Events', href: '/events' },
+  { name: 'About', href: '/about' }
+]
+
 export function Header() {
   const { user, signout } = useAuth()
   const { getTotalItems } = useCart()
@@ -26,7 +33,7 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
-      <nav className="container flex items-center justify-between h-16">
+      <nav className="container mx-auto flex items-center justify-between h-16 px-4">
         <Link to="/" className="text-xl font-bold">
           MONET MAKERS
         </Link>
@@ -37,9 +44,6 @@ export function Header() {
           </Link>
           <Link to="/explore" className="text-sm hover:text-primary">
             Explore
-          </Link>
-          <Link to="/artists" className="text-sm hover:text-primary">
-            Artists
           </Link>
           <Link to="/about" className="text-sm hover:text-primary">
             About
@@ -63,41 +67,21 @@ export function Header() {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative p-0 h-8 w-8 rounded-full hover:bg-transparent">
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback className="bg-primary text-primary-foreground">
-                      {user.name.charAt(0).toUpperCase()}
-                    </AvatarFallback>
+                    <AvatarFallback>{user.email[0].toUpperCase()}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{user.name}</p>
+                    <p className="text-sm font-medium leading-none">{user.email}</p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      {user.email}
+                      {user.role}
                     </p>
                   </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {user.role === 'artist' && (
-                  <>
-                    <DropdownMenuItem asChild>
-                      <Link to="/manage-artworks">Manage Artworks</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/upload-artwork">Upload Artwork</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                  </>
-                )}
-                <DropdownMenuItem asChild>
-                  <Link to="/profile">Profile</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/orders">Orders</Link>
-                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut}>
                   Sign Out

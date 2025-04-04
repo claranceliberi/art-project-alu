@@ -1,50 +1,68 @@
 import React from 'react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 export default function Activity() {
   return (
-    <div className="container py-8">
-      <h1 className="text-4xl font-bold mb-6">Activity Feed</h1>
-      <div className="space-y-6">
-        {/* Placeholder for activity feed */}
-        <div className="p-6 border rounded-lg shadow-sm">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-muted rounded-full" />
-            <div>
-              <h3 className="font-semibold">New Artwork Listed</h3>
-              <p className="text-sm text-muted-foreground">
-                Artist Name posted a new artwork "Untitled"
-              </p>
-              <span className="text-xs text-muted-foreground">2 hours ago</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6 border rounded-lg shadow-sm">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-muted rounded-full" />
-            <div>
-              <h3 className="font-semibold">Artwork Sold</h3>
-              <p className="text-sm text-muted-foreground">
-                "Abstract Landscape" by Artist Name was purchased
-              </p>
-              <span className="text-xs text-muted-foreground">5 hours ago</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6 border rounded-lg shadow-sm">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-muted rounded-full" />
-            <div>
-              <h3 className="font-semibold">New Artist Joined</h3>
-              <p className="text-sm text-muted-foreground">
-                Welcome Artist Name to our community!
-              </p>
-              <span className="text-xs text-muted-foreground">1 day ago</span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-8">Activity</h1>
+      
+      <Tabs defaultValue="recently-viewed" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="recently-viewed">Recently Viewed</TabsTrigger>
+          <TabsTrigger value="invites">Invites</TabsTrigger>
+          <TabsTrigger value="purchases">Purchases</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="recently-viewed">
+          <Card>
+            <CardHeader>
+              <CardTitle>Recently Viewed Artworks</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[400px]">
+                <div className="space-y-4">
+                  {/* Recently viewed items will be mapped here */}
+                  <p className="text-muted-foreground">No recently viewed items</p>
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="invites">
+          <Card>
+            <CardHeader>
+              <CardTitle>Invites</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[400px]">
+                <div className="space-y-4">
+                  {/* Invites will be mapped here */}
+                  <p className="text-muted-foreground">No pending invites</p>
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="purchases">
+          <Card>
+            <CardHeader>
+              <CardTitle>Purchase History</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[400px]">
+                <div className="space-y-4">
+                  {/* Purchases will be mapped here */}
+                  <p className="text-muted-foreground">No purchase history</p>
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 } 

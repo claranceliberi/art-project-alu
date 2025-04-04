@@ -140,6 +140,78 @@ export const categories: Category[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
+  {
+    id: '6',
+    name: 'Performative Art',
+    description: 'Live art performances and experiences',
+    imageUrl: '/assets/images/performative art icon.jpg',
+    slug: 'performative-art',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '7',
+    name: 'Digital Art',
+    description: 'Digital creations and NFTs',
+    imageUrl: '/assets/images/digital art.jpg',
+    slug: 'digital-art',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '8',
+    name: 'Animation',
+    description: 'Animated artworks and motion graphics',
+    imageUrl: '/assets/images/animated.jpg',
+    slug: 'animation',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '9',
+    name: 'Web Design',
+    description: 'Digital web experiences and interfaces',
+    imageUrl: '/assets/images/web design icon.jpg',
+    slug: 'web-design',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '10',
+    name: 'Drawing',
+    description: 'Sketches and illustrations',
+    imageUrl: '/assets/images/drawing.jpg',
+    slug: 'drawing',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '11',
+    name: 'Jewelry',
+    description: 'Artistic jewelry pieces',
+    imageUrl: '/assets/images/download (1).jpg',
+    slug: 'jewelry',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '12',
+    name: 'Printmaking',
+    description: 'Print and press art',
+    imageUrl: '/assets/images/printmaking icon.jpg',
+    slug: 'printmaking',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '13',
+    name: 'Literature',
+    description: 'Written artistry and poetry',
+    imageUrl: '/assets/images/literature.jpg',
+    slug: 'literature',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  }
 ]
 
 export const artworks: Artwork[] = [
@@ -345,3 +417,142 @@ export const featuredArtists: Artist[] = [
     followers: 1420
   }
 ]
+
+export const collections = [
+  {
+    id: 'nocturne',
+    name: 'Nocturne',
+    description: 'A collection of blue-toned pieces capturing the essence of night and water',
+    image: '/assets/images/ACTIVEGLOW.jpg',
+    categoryId: 'paintings',
+    categoryName: 'Paintings',
+    pieces: [
+      {
+        id: 'n1',
+        title: "ACTIVEGLOW",
+        description: "Abstract blue waves with textured impasto technique",
+        imageUrl: "/assets/images/ACTIVEGLOW.jpg",
+        thumbnailUrl: "/assets/images/ACTIVEGLOW.jpg",
+        artistId: "em1",
+        artistName: "Elena Moonlight",
+        price: 120,
+        medium: "Oil on canvas",
+        dimensions: {
+          width: 24,
+          height: 36,
+          unit: "in"
+        },
+        categoryId: "paintings",
+        categoryName: "Paintings",
+        year: 2024,
+        isSold: false,
+        isFeatured: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        collectionId: "nocturne",
+        collectionName: "Nocturne"
+      },
+      {
+        id: 'n2',
+        title: "Blue Nude",
+        description: "Oil painting, 2020",
+        imageUrl: "/assets/images/Blue-Nude-2020.jpg",
+        thumbnailUrl: "/assets/images/Blue-Nude-2020.jpg",
+        artistId: "kc1",
+        artistName: "Katrina Case",
+        price: 95,
+        medium: "Oil on canvas",
+        dimensions: {
+          width: 20,
+          height: 24,
+          unit: "in"
+        },
+        categoryId: "paintings",
+        categoryName: "Paintings",
+        year: 2020,
+        isSold: false,
+        isFeatured: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        collectionId: "nocturne",
+        collectionName: "Nocturne"
+      },
+      {
+        id: 'n3',
+        title: "Bluey Moon",
+        description: "Serene moonlit landscape with reflections",
+        imageUrl: "/assets/images/Bluey-Moon.jpg",
+        thumbnailUrl: "/assets/images/Bluey-Moon.jpg",
+        artistId: "em1",
+        artistName: "Elena Moonlight",
+        price: 145,
+        medium: "Oil on canvas",
+        dimensions: {
+          width: 24,
+          height: 24,
+          unit: "in"
+        },
+        categoryId: "paintings",
+        categoryName: "Paintings",
+        year: 2024,
+        isSold: false,
+        isFeatured: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        collectionId: "nocturne",
+        collectionName: "Nocturne"
+      },
+      {
+        id: 'n4',
+        title: "Humpback Whale",
+        description: "Impasto oil painting of a majestic humpback whale",
+        imageUrl: "/assets/images/Humpback-Whale-Oil-Painting.jpg",
+        thumbnailUrl: "/assets/images/Humpback-Whale-Oil-Painting.jpg",
+        artistId: "ma1",
+        artistName: "Marine Arts",
+        price: 110,
+        medium: "Oil on canvas",
+        dimensions: {
+          width: 6,
+          height: 6,
+          unit: "in"
+        },
+        categoryId: "paintings",
+        categoryName: "Paintings",
+        year: 2024,
+        isSold: false,
+        isFeatured: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        collectionId: "nocturne",
+        collectionName: "Nocturne"
+      },
+      {
+        id: 'n5',
+        title: "Blue Waves",
+        description: "Abstract blue waves in motion",
+        imageUrl: "/assets/images/Jerome-Karsenti.jpg",
+        thumbnailUrl: "/assets/images/Jerome-Karsenti.jpg",
+        artistId: "jk1",
+        artistName: "Jérôme Karsenti",
+        price: 130,
+        medium: "Oil on canvas",
+        dimensions: {
+          width: 30,
+          height: 40,
+          unit: "in"
+        },
+        categoryId: "paintings",
+        categoryName: "Paintings",
+        year: 2024,
+        isSold: false,
+        isFeatured: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        collectionId: "nocturne",
+        collectionName: "Nocturne"
+      }
+    ]
+  },
+  // ... rest of the collections ...
+];
